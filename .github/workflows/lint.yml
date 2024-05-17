@@ -1,0 +1,30 @@
+name: Lint
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        id: setup-node
+        with:
+          cache: npm
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Next Lint
+        run: npm run lint
+
+      - name: Eslint
+        run: npm run eslint:lint
