@@ -7,7 +7,7 @@ const fileUploadApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
     getPresignedUrl: builder.mutation<TPresignedFileUrl[], TPresignedUrlFileDto>({
       query: (files) => ({
-        url: `file-upload`,
+        url: `file-uploads`,
         method: "POST",
         body: { files },
       }),
