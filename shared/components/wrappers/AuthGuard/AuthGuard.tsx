@@ -7,13 +7,13 @@ import Unauthorized from "../../Unauthorized/Unauthorized";
 import { useSessionContext } from "../AppInitializer/AppInitializerContext";
 import { TAuthGuardProps } from "./AuthGuard.types";
 import {
-  getDefaultAllowedRolesInLoggedInRoute,
-  getLoginUrlWithRedirectParam,
+  getDefaultAllowedRolesInSignedInRoute,
+  getSignInUrlWithRedirectParam,
 } from "./AuthGuard.utils";
 
 const AuthGuard = ({ children, allowedRoles }: TAuthGuardProps) => {
   if (!allowedRoles || allowedRoles.length === 0) {
-    allowedRoles = getDefaultAllowedRolesInLoggedInRoute();
+    allowedRoles = getDefaultAllowedRolesInSignedInRoute();
   }
 
   const router = useRouter();
@@ -26,7 +26,7 @@ const AuthGuard = ({ children, allowedRoles }: TAuthGuardProps) => {
 
     if (!isLoading && isUnauthenticated) {
       const redirectTo = `${location.pathname}${location.search}`;
-      router.push(getLoginUrlWithRedirectParam(redirectTo));
+      router.push(getSignInUrlWithRedirectParam(redirectTo));
     }
   }, [router, isLoading, error, isUnauthenticated, isUnauthorized]);
 

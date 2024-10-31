@@ -1,3 +1,6 @@
-export const API_BASE_URL = process.env["NEXT_PUBLIC_API_BASE_URL"];
-export const NODE_ENV = process.env["NODE_ENV"] as "production" | "development" | "local";
-export const WS_BASE_URL = process.env["NEXT_PUBLIC_WS_BASE_URL"];
+import { env } from "next-runtime-env";
+
+export const NODE_ENV = env("NODE_ENV") as "production" | "development" | "local";
+export const STAGE_ENV = env("NEXT_PUBLIC_STAGE_ENV") as "production" | "development" | "local";
+export const API_BASE_URL = env("NEXT_PUBLIC_API_BASE_URL");
+export const WS_BASE_URL = env("NEXT_PUBLIC_WS_BASE_URL");

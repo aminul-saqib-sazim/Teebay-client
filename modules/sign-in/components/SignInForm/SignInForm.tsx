@@ -12,10 +12,10 @@ import {
 } from "@/shared/components/shadui/form";
 import { Input } from "@/shared/components/shadui/input";
 
-import { useLoginForm } from "./LoginForm.hooks";
+import { useSignInForm } from "./SignInForm.hooks";
 
-const LoginForm = () => {
-  const { form, onSubmit } = useLoginForm();
+export const SignInForm = () => {
+  const { form, onSubmit } = useSignInForm();
 
   return (
     <Form {...form}>
@@ -48,10 +48,8 @@ const LoginForm = () => {
           )}
         />
 
-        <Button type="submit">Login</Button>
+        <Button type="submit">Sign In</Button>
       </form>
     </Form>
   );
 };
-
-export default LoginForm;

@@ -2,14 +2,14 @@ import { useEffect } from "react";
 
 import { useRouter } from "next/router";
 
-import LoginContainer from "@/modules/login/container/LoginContainer";
+import SignInContainer from "@/modules/sign-in/container/SignInContainer";
 import LoadingSpinner from "@/shared/components/LoadingSpinner/LoadingSpinner";
 import NextHead from "@/shared/components/NextHead";
 import { useSessionContext } from "@/shared/components/wrappers/AppInitializer/AppInitializerContext";
-import { DEFAULT_REDIRECT_PATH_AS_LOGGED_IN_USER } from "@/shared/constants/app.constants";
+import { HOME_ROUTE } from "@/shared/constants/routes.constants";
 import { NextApplicationPage } from "@/shared/typedefs";
 
-const Login: NextApplicationPage = () => {
+const SignIn: NextApplicationPage = () => {
   const router = useRouter();
   const { isLoading, user } = useSessionContext();
 
@@ -20,7 +20,7 @@ const Login: NextApplicationPage = () => {
       if (router.query["redirect"]) {
         router.push(router.query["redirect"] as string);
       } else {
-        router.push(DEFAULT_REDIRECT_PATH_AS_LOGGED_IN_USER);
+        router.push(HOME_ROUTE);
       }
     }
   }, [isLoading, user, router]);
@@ -30,9 +30,9 @@ const Login: NextApplicationPage = () => {
   return (
     <>
       <NextHead />
-      <LoginContainer />
+      <SignInContainer />
     </>
   );
 };
 
-export default Login;
+export default SignIn;

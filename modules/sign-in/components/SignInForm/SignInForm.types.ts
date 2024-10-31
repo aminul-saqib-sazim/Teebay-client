@@ -1,4 +1,4 @@
-export type TLoginFormFields = {
+export type TSignInFormFields = {
   email: string;
   password: string;
 };

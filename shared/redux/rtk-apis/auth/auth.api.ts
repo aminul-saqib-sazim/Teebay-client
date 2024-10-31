@@ -1,20 +1,20 @@
 import { TApiResponse } from "@/shared/typedefs";
 
 import projectApi from "../api.config";
-import { TLoginRequestFields, TLoginResponse } from "./auth.types";
+import { TSignInRequestFields, TSignInResponse } from "./auth.types";
 
 const authApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<TLoginResponse, TLoginRequestFields>({
+    signIn: builder.mutation<TSignInResponse, TSignInRequestFields>({
       query: (data) => ({
-        url: "auth/login",
+        url: "auth/sign-in",
         method: "POST",
         body: data,
       }),
-      transformResponse: (response: TApiResponse<TLoginResponse>) => response.data,
+      transformResponse: (response: TApiResponse<TSignInResponse>) => response.data,
     }),
   }),
   overrideExisting: false,
 });
 
-export const { useLoginMutation } = authApi;
+export const { useSignInMutation } = authApi;

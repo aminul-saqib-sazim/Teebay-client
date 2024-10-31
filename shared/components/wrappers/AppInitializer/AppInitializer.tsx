@@ -1,40 +1,25 @@
 import { PropsWithChildren, useEffect } from "react";
 
-import { toast } from "sonner";
-
-import { useAppDispatch } from "@/shared/redux/hooks";
-import { setUser } from "@/shared/redux/reducers/user.reducer";
-import { useLazyMeQuery } from "@/shared/redux/rtk-apis/users/users.api";
-import { parseApiErrorMessage } from "@/shared/utils/errors";
+import { useGetMe } from "@/shared/hooks/useGetMe";
+import { useSubscribeToLocalStorageEvents } from "@/shared/hooks/useSubscribeToLocalStorageEvents";
 
 import { AppInitializerContext } from "./AppInitializerContext";
 
 const AppInitializer = ({ children }: PropsWithChildren) => {
-  const dispatch = useAppDispatch();
+  const { isLoading, error, user, getMe, getMeOnLoad } = useGetMe();
 
-  const [getMe, { isFetching, isLoading, error, data, isUninitialized }] = useLazyMeQuery();
+  useSubscribeToLocalStorageEvents();
 
   useEffect(() => {
-    getMe()
-      .unwrap()
-      .then((user) => {
-        dispatch(setUser(user));
-      })
-      .catch((err) => {
-        const errorMessage = parseApiErrorMessage(err);
-
-        toast("Something went wrong", {
-          description: errorMessage,
-        });
-      });
-  }, [dispatch, getMe]);
+    getMeOnLoad();
+  }, [getMeOnLoad]);
 
   return (
     <AppInitializerContext.Provider
       value={{
-        isLoading: isFetching || isLoading || isUninitialized,
+        isLoading,
         error,
-        user: data,
+        user,
         getMe,
       }}
     >

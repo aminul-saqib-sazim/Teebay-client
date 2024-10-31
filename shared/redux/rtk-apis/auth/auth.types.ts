@@ -1,4 +1,4 @@
-export type TLoginRequestFields = {
+export type TSignInRequestFields = {
   email: string;
   password: string;
 };
@@ -15,7 +15,7 @@ export type TTokenizedUser = {
   claimId: number;
 };
 
-export type TLoginResponse = {
+export type TSignInResponse = {
   accessToken: string;
   user: TTokenizedUser;
 };

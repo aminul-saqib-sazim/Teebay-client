@@ -1,6 +1,6 @@
 ARG NODE_VERSION=20.14
 
-FROM node:${NODE_VERSION}-alpine as BASE
+FROM node:${NODE_VERSION}-alpine AS base
 
 WORKDIR /usr/src/
 
@@ -9,7 +9,7 @@ RUN apk add --no-cache git \
   && yarn install --frozen-lockfile \
   && yarn cache clean
 
-FROM node:${NODE_VERSION}-alpine AS BUILD
+FROM node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /usr/src/
 
@@ -18,7 +18,7 @@ COPY . .
 RUN apk add --no-cache git curl \
   && yarn build
 
-FROM node:${NODE_VERSION}-alpine AS PRODUCTION
+FROM node:${NODE_VERSION}-alpine AS production
 
 WORKDIR /usr/src/
 
@@ -27,9 +27,8 @@ COPY --from=BUILD /usr/src/package.json /usr/src/yarn.lock ./
 RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline \
   && yarn cache clean
 
-COPY --from=BUILD /usr/src/next.config.js ./
+COPY --from=BUILD /usr/src/next.config.mjs ./
 COPY --from=BUILD /usr/src/.next ./.next
 COPY --from=BUILD /usr/src/public ./public
-COPY --from=BUILD /usr/src/.env ./ 
 
 CMD ["yarn", "start", "-p", "5000"]
