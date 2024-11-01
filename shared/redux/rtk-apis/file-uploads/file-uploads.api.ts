@@ -1,17 +1,17 @@
 import { TApiResponse } from "@/shared/typedefs";
+import { IPresignedUrlFile, IPresignedUrlFileDto } from "@/shared/typedefs/api";
 
 import projectApi from "../api.config";
-import { TPresignedFileUrl, TPresignedUrlFileDto } from "./file-uploads.types";
 
 const fileUploadApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPresignedUrl: builder.mutation<TPresignedFileUrl[], TPresignedUrlFileDto>({
+    getPresignedUrl: builder.mutation<IPresignedUrlFile[], IPresignedUrlFileDto>({
       query: (files) => ({
         url: `file-uploads`,
         method: "POST",
         body: { files },
       }),
-      transformResponse: (response: TApiResponse<TPresignedFileUrl[]>) => response.data,
+      transformResponse: (response: TApiResponse<IPresignedUrlFile[]>) => response.data,
     }),
   }),
   overrideExisting: false,

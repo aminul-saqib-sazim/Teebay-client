@@ -1,6 +1,6 @@
 import { ComponentProps } from "react";
 
-import { EUserRole } from "@/shared/redux/rtk-apis/auth/auth.types";
+import { EUserRole } from "@/shared/typedefs/api";
 
 import { TAuthGuardProps } from "../../wrappers/AuthGuard/AuthGuard.types";
 

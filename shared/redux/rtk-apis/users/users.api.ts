@@ -1,13 +1,13 @@
 import { TApiResponse } from "@/shared/typedefs";
+import { ITokenizedUser } from "@/shared/typedefs/api";
 
 import projectApi from "../api.config";
-import { TTokenizedUser } from "../auth/auth.types";
 
 const usersApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
-    me: builder.query<TTokenizedUser, void>({
+    me: builder.query<ITokenizedUser, void>({
       query: () => "users/me",
-      transformResponse: (response: TApiResponse<TTokenizedUser>) => response.data,
+      transformResponse: (response: TApiResponse<ITokenizedUser>) => response.data,
     }),
   }),
   overrideExisting: false,

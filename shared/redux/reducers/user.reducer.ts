@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 import { TRootState } from "@/shared/redux/store";
-
-import { EUserRole, TTokenizedUser } from "../rtk-apis/auth/auth.types";
+import { EUserRole, ITokenizedUser } from "@/shared/typedefs/api";
 
 interface IAuthenticatedUser {
   userId: number | null;
@@ -23,7 +22,7 @@ export const authenticatedUserSlice = createSlice({
   name: "authenticatedUser",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<TTokenizedUser>) => {
+    setUser: (state, action: PayloadAction<ITokenizedUser>) => {
       state.email = action.payload.email;
       state.claimId = action.payload.claimId;
       state.claim = action.payload.claim as EUserRole;

@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { EUserRole } from "@/shared/redux/rtk-apis/auth/auth.types";
+import { EUserRole } from "@/shared/typedefs/api";
 
 type TAuthGuardParams = {
   allowedRoles?: EUserRole[];
