@@ -1,5 +1,8 @@
 import "@/styles/globals.css";
 
+import i18nConfig from "../next-i18next.config.mjs";
+import { appWithTranslation } from "next-i18next";
+
 import { Provider as ReduxProvider } from "react-redux";
 
 import { Toaster } from "@/shared/components/shadui/sonner";
@@ -9,7 +12,7 @@ import { NOTIFICATION_AUTO_CLOSE_TIMEOUT_IN_MILLISECONDS } from "@/shared/consta
 import { store } from "@/shared/redux/store";
 import { TCustomAppProps } from "@/shared/typedefs";
 
-export default function App(props: TCustomAppProps) {
+function App(props: TCustomAppProps) {
   const { Component, pageProps } = props;
 
   const component = Component.Layout ? (
@@ -23,7 +26,7 @@ export default function App(props: TCustomAppProps) {
   return (
     <ReduxProvider store={store}>
       <AppInitializer>
-        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <Toaster duration={NOTIFICATION_AUTO_CLOSE_TIMEOUT_IN_MILLISECONDS} />
           {Component.Guard ? <Component.Guard>{component}</Component.Guard> : component}
         </ThemeProvider>
@@ -31,3 +34,7 @@ export default function App(props: TCustomAppProps) {
     </ReduxProvider>
   );
 }
+
+const AppWithTranslation = appWithTranslation(App, i18nConfig);
+
+export default AppWithTranslation;

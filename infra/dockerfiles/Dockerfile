@@ -28,6 +28,7 @@ RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offlin
   && yarn cache clean
 
 COPY --from=BUILD /usr/src/next.config.mjs ./
+COPY --from=BUILD /usr/src/next-i18next.config.mjs ./
 COPY --from=BUILD /usr/src/.next ./.next
 COPY --from=BUILD /usr/src/public ./public
 

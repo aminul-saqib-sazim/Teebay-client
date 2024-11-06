@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useTranslation } from "next-i18next";
+
 import { PasswordInput } from "@/shared/components/Form/PasswordInput";
 import { Button } from "@/shared/components/shadui/button";
 import {
@@ -15,10 +17,12 @@ import { Input } from "@/shared/components/shadui/input";
 import { useSignInForm } from "./SignInForm.hooks";
 
 export const SignInForm = () => {
+  const { t } = useTranslation("sign-in");
   const { form, onSubmit } = useSignInForm();
 
   return (
     <Form {...form}>
+      {t("signInText")}
       <form onSubmit={onSubmit}>
         <FormField
           control={form.control}

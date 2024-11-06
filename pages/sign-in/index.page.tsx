@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+import i18nConfig from "@/next-i18next.config.mjs";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 
 import SignInContainer from "@/modules/sign-in/container/SignInContainer";
@@ -36,3 +38,11 @@ const SignIn: NextApplicationPage = () => {
 };
 
 export default SignIn;
+
+export async function getStaticProps({ locale }: { locale?: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en-US", ["common", "sign-in"], i18nConfig)),
+    },
+  };
+}

@@ -1,3 +1,4 @@
+import i18nConfig from "./next-i18next.config.mjs";
 import { configureRuntimeEnv } from "next-runtime-env/build/configure.js";
 
 import { execSync } from "child_process";
@@ -51,6 +52,8 @@ const nextConfig = {
   images: {
     domains: ["localhost"],
   },
+
+  i18n: i18nConfig.i18n,
 
   // eslint-disable-next-line require-await
   async headers() {
