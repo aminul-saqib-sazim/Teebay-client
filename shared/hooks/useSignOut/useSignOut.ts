@@ -17,9 +17,17 @@ export const useSignOut = () => {
         reason = ESignOutReason.UserSignedOut,
         redirectRoute = SIGN_IN_ROUTE,
         shouldEmitSignOutEvent = true,
+        shouldRedirect = true,
       } = args ?? {};
 
-      signOutImpl({ dispatch, router, reason, redirectRoute, shouldEmitSignOutEvent });
+      signOutImpl({
+        dispatch,
+        router,
+        reason,
+        redirectRoute,
+        shouldEmitSignOutEvent,
+        shouldRedirect,
+      });
     },
     [router, dispatch],
   );

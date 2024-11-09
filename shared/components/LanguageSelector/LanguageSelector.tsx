@@ -3,11 +3,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
-import { SelectGroup } from "@radix-ui/react-select";
-
 import { I18N_LNG_LOCAL_STORAGE_KEY } from "@/shared/constants/app.constants";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shadui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+} from "../shadui/select";
 import { ELocale, LANGUAGE_SELECTOR_OPTIONS } from "./LanguageSelector.constants";
 
 export const LanguageSelector = () => {
@@ -52,7 +57,7 @@ export const LanguageSelector = () => {
 
   return (
     <Select onValueChange={handleLanguageChange} value={value}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder={t("selectLanguage")} />
       </SelectTrigger>
       <SelectContent>

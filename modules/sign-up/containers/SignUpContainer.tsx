@@ -1,3 +1,4 @@
+import CustomLink from "@/shared/components/CustomLink/CustomLink";
 import {
   Card,
   CardContent,
@@ -5,11 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/shadui/card";
+import { Separator } from "@/shared/components/shadui/separator";
 
 import SignUpForm from "../components/SignUpForm";
 
 const SignUpContainer = () => (
-  <div className="container mx-auto flex items-center justify-center min-h-screen p-4">
+  <div className="flex-1 flex items-center justify-center p-4">
     <Card className="w-full max-w-lg">
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
@@ -17,6 +19,13 @@ const SignUpContainer = () => (
       </CardHeader>
       <CardContent>
         <SignUpForm />
+
+        <Separator className="my-4" />
+
+        <div className="flex items-center justify-center gap-1 mt-4">
+          <p>Already have an account?</p>
+          <CustomLink href="/sign-in" label="Sign In" />
+        </div>
       </CardContent>
     </Card>
   </div>

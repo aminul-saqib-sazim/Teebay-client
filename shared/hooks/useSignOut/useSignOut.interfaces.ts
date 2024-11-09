@@ -4,4 +4,5 @@ export interface ISignOutArgs {
   reason?: ESignOutReason;
   redirectRoute?: string;
   shouldEmitSignOutEvent?: boolean;
+  shouldRedirect?: boolean;
 }

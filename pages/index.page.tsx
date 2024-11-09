@@ -1,55 +1,87 @@
 import i18nConfig from "../next-i18next.config.mjs";
-import { Trans, useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import { LanguageSelector } from "@/shared/components/LanguageSelector";
 import NextHead from "@/shared/components/NextHead";
+import { Button } from "@/shared/components/shadui/button";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/shared/components/shadui/accordion";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/shadui/card";
+import GeneralLayout from "@/shared/layouts/GeneralLayout";
+import { NextApplicationPage } from "@/shared/typedefs";
 
-export default function Home() {
-  const { t } = useTranslation("common");
+const Home: NextApplicationPage = () => (
+  <>
+    <NextHead />
 
-  return (
-    <>
-      <NextHead />
-
-      <div className="flex justify-center items-center h-screen">
-        <div className="p-4 flex flex-col items-center">
-          <h1 className="text-3xl font-bold">NextJS ShadUI Template</h1>
-          <div className="w-4/5">
-            <Accordion type="single" collapsible>
-              <AccordionItem value="item-1">
-                <AccordionTrigger>
-                  Is this template ready with all necessary libraries installed?
-                </AccordionTrigger>
-                <AccordionContent>Yes.</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-
-            <hr />
-            <h3 className="text-xl font-bold">Translations</h3>
-            <LanguageSelector />
-            <p>{t("hello")}</p>
-            <p>{t("variableWithCount", { count: 3 })}</p>
-
-            <Trans
-              i18nKey="transComponent"
-              components={{
-                bold: <strong />,
-                italic: <em />,
-              }}
-            />
+    <div className="w-full">
+      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center space-y-4 text-center">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                Welcome to Sazim&rsquo;s NextJS + ShadCN Starter Template
+              </h1>
+              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                Jumpstart your next project with our beautifully designed and fully functional
+                template.
+              </p>
+            </div>
+            <div className="space-x-4">
+              <Button>Get Started</Button>
+            </div>
           </div>
         </div>
-      </div>
-    </>
-  );
-}
+      </section>
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+        <div className="container px-4 md:px-6">
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">
+            Features
+          </h2>
+          <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
+            <Card>
+              <CardHeader>
+                <CardTitle>Responsive Design</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Our template looks great on any device, be it a phone, tablet, or desktop.
+                </CardDescription>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Customizable</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Easily customize the template to fit your brand and needs.
+                </CardDescription>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Fast Performance</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Optimized for speed to ensure your website loads quickly.
+                </CardDescription>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+    </div>
+  </>
+);
+
+Home.Layout = GeneralLayout;
+
+export default Home;
 
 export async function getStaticProps({ locale }: { locale?: string }) {
   return {

@@ -1,6 +1,6 @@
 import {
   ADMIN_PANEL_ROUTE,
-  HOME_ROUTE,
+  DASHBOARD_ROUTE,
   SIGN_IN_ROUTE,
   SUPER_USER_DASHBOARD_ROUTE,
 } from "@/shared/constants/routes.constants";
@@ -21,6 +21,6 @@ export const getRoleBasedDefaultRouteAfterSignIn = (role: EUserRole) => {
     case EUserRole.ADMIN:
       return ADMIN_PANEL_ROUTE;
     default:
-      return HOME_ROUTE;
+      return DASHBOARD_ROUTE;
   }
 };

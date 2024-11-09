@@ -1,0 +1,99 @@
+import React from "react";
+
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { Menu } from "lucide-react";
+
+import { LanguageSelector } from "../LanguageSelector";
+import { Button } from "../shadui/button";
+import { Separator } from "../shadui/separator";
+import { Sheet, SheetContent, SheetTrigger } from "../shadui/sheet";
+import { useSessionContext } from "../wrappers/AppInitializer/AppInitializerContext";
+import SignedInUserAvatarAndMenu from "./components/SignedInUserAvatarAndMenu";
+
+const NavigationBar = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const router = useRouter();
+  const { isLoading, user } = useSessionContext();
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 items-center">
+        <div className="mr-4 hidden md:flex">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <span className="hidden font-bold sm:inline-block">My Website</span>
+          </Link>
+          <nav className="flex items-center space-x-6 text-sm font-medium">
+            <Link href="/about">About</Link>
+            <Link href="/products">Products</Link>
+            <Link href="/contact">Contact</Link>
+          </nav>
+        </div>
+
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="pr-0">
+            <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
+              <span className="font-bold">My Website</span>
+            </Link>
+            <Separator className="my-4" />
+            <div className="w-full flex-1 md:w-auto md:flex-none">
+              <LanguageSelector />
+            </div>
+            <Separator className="my-4" />
+            <nav className="flex flex-col space-y-4">
+              <Link
+                href="/about"
+                className="block px-2 py-1 text-lg"
+                onClick={() => setIsOpen(false)}
+              >
+                About
+              </Link>
+              <Link
+                href="/products"
+                className="block px-2 py-1 text-lg"
+                onClick={() => setIsOpen(false)}
+              >
+                Products
+              </Link>
+              <Link
+                href="/contact"
+                className="block px-2 py-1 text-lg"
+                onClick={() => setIsOpen(false)}
+              >
+                Contact
+              </Link>
+            </nav>
+          </SheetContent>
+        </Sheet>
+
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 hidden md:block md:w-auto md:flex-none">
+            <LanguageSelector />
+          </div>
+          <div className="w-full flex-1 flex justify-end md:w-auto md:flex-none">
+            {!isLoading &&
+              (user ? (
+                <SignedInUserAvatarAndMenu user={user} />
+              ) : (
+                <Button className="hidden md:inline-flex" onClick={() => router.push("/sign-in")}>
+                  Sign In
+                </Button>
+              ))}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default NavigationBar;

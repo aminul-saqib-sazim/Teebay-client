@@ -5,10 +5,11 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 
 import SignInContainer from "@/modules/sign-in/container/SignInContainer";
-import LoadingSpinner from "@/shared/components/LoadingSpinner/LoadingSpinner";
+import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import NextHead from "@/shared/components/NextHead";
 import { useSessionContext } from "@/shared/components/wrappers/AppInitializer/AppInitializerContext";
-import { HOME_ROUTE } from "@/shared/constants/routes.constants";
+import { DASHBOARD_ROUTE } from "@/shared/constants/routes.constants";
+import GeneralLayout from "@/shared/layouts/GeneralLayout";
 import { NextApplicationPage } from "@/shared/typedefs";
 
 const SignIn: NextApplicationPage = () => {
@@ -22,12 +23,12 @@ const SignIn: NextApplicationPage = () => {
       if (router.query["redirect"]) {
         router.push(router.query["redirect"] as string);
       } else {
-        router.push(HOME_ROUTE);
+        router.push(DASHBOARD_ROUTE);
       }
     }
   }, [isLoading, user, router]);
 
-  if (isLoading || user) return <LoadingSpinner />;
+  if (isLoading || user) return <FullPageLoadingSpinner />;
 
   return (
     <>
@@ -36,6 +37,8 @@ const SignIn: NextApplicationPage = () => {
     </>
   );
 };
+
+SignIn.Layout = GeneralLayout;
 
 export default SignIn;
 

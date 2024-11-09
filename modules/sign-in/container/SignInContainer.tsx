@@ -9,11 +9,12 @@ import {
   CardDescription,
   CardContent,
 } from "@/shared/components/shadui/card";
+import { Separator } from "@/shared/components/shadui/separator";
 
 import { SignInForm } from "../components/SignInForm";
 
 const SignInContainer = () => (
-  <div className="container mx-auto flex items-center justify-center min-h-screen p-4">
+  <div className="flex-1 flex items-center justify-center p-4">
     <Card className="w-full max-w-lg">
       <CardHeader>
         <CardTitle>Sign-in to your account</CardTitle>
@@ -23,11 +24,18 @@ const SignInContainer = () => (
         <SignInForm />
         <CustomLink href="/forgot-password" label="Forgot Password?" className="my-4" />
 
-        <hr className="h-px my-8 bg-gray-200 border-0" />
+        <Separator className="my-4" />
 
         <div className="flex flex-col space-y-4">
           <Button variant="outline">Sign In with Magic Link</Button>
           <Button variant="destructive">Sign In with Google</Button>
+        </div>
+
+        <Separator className="my-4" />
+
+        <div className="flex items-center justify-center gap-1">
+          <p>Don&rsquo;t have an account?</p>
+          <CustomLink href="/sign-up" label="Sign Up" />
         </div>
       </CardContent>
     </Card>

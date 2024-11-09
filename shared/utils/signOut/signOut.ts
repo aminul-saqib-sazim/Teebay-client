@@ -18,12 +18,14 @@ export const signOut = ({
   reason,
   redirectRoute = SIGN_IN_ROUTE,
   shouldEmitSignOutEvent = true,
+  shouldRedirect = true,
 }: {
   dispatch: TAppDispatch;
   router: NextRouter;
   reason: ESignOutReason;
   redirectRoute?: string;
   shouldEmitSignOutEvent?: boolean;
+  shouldRedirect?: boolean;
 }) => {
   localStorage.clear();
 
@@ -33,6 +35,8 @@ export const signOut = ({
   if (shouldEmitSignOutEvent) {
     emitSignOutEvent(reason);
   }
+
+  if (!shouldRedirect) return;
 
   router.push(redirectRoute);
 };

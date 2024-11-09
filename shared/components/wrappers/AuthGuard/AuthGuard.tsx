@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { useRouter } from "next/router";
 
-import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+import FullPageLoadingSpinner from "../../FullPageLoadingSpinner";
 import Unauthorized from "../../Unauthorized/Unauthorized";
 import { useSessionContext } from "../AppInitializer/AppInitializerContext";
 import { TAuthGuardProps } from "./AuthGuard.types";
@@ -30,7 +30,7 @@ const AuthGuard = ({ children, allowedRoles }: TAuthGuardProps) => {
     }
   }, [router, isLoading, error, isUnauthenticated, isUnauthorized]);
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <FullPageLoadingSpinner />;
 
   if (isUnauthenticated || isUnauthorized) return <Unauthorized />;
 
