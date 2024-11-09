@@ -19,7 +19,7 @@ const PasswordInput = forwardRef<HTMLInputElement, ICustomInputProps>(
           type={showPassword ? "text" : "password"}
           className={cn(
             isError ? "border-destructive" : "",
-            "hide-password-toggle pr-10 placeholder:text-background-secondary-foreground invalid:border-destructive placeholder:opacity-50",
+            "hide-password-toggle pr-10 placeholder:text-muted-foreground invalid:border-destructive placeholder:opacity-100",
             className,
           )}
           ref={ref}

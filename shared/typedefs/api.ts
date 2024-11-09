@@ -1,3 +1,15 @@
+export interface IAdminFindAllUserResponse {
+  data: IUserResponse[];
+  meta: IPaginationMetadataResponse;
+}
+
+export interface IAdminUpdateUserDto {
+  /** @minLength 8 */
+  password?: string;
+  roleId?: number;
+  state?: EUserState;
+}
+
 export enum EAllowedMimeTypes {
   ApplicationPdf = "application/pdf",
   ImagePng = "image/png",
@@ -10,12 +22,46 @@ export enum EUserRole {
   ADMIN = "ADMIN",
 }
 
+export enum EUserState {
+  UNREGISTERED = "UNREGISTERED",
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}
+
+export interface IFindAllUsersParams {
+  /**
+   * @min 1
+   * @default 10
+   */
+  limit: number;
+  /**
+   * @min 1
+   * @default 1
+   */
+  page: number;
+}
+
+export interface IForgotPasswordDto {
+  /** @format email */
+  email: string;
+}
+
+export interface IPaginationMetadataResponse {
+  currentPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  itemsPerPage: number;
+  totalItems: number;
+  totalPages: number;
+}
+
 export interface IPresignedUrlFile {
   name: string;
   type: EAllowedMimeTypes;
 }
 
 export interface IPresignedUrlFileDto {
+  /** @minItems 1 */
   files: IPresignedUrlFile[];
 }
 
@@ -26,10 +72,16 @@ export interface IPresignedUrlResponse {
 }
 
 export interface IRegisterUserDto {
+  /** @format email */
   email: string;
   /** @minLength 8 */
   password: string;
-  profileInput: IUserProfileDto;
+  userProfile: IUserProfileDto;
+}
+
+export interface IResetPasswordDto {
+  /** @minLength 8 */
+  password: string;
 }
 
 export interface IRoleResponse {
@@ -37,6 +89,31 @@ export interface IRoleResponse {
   id: number;
   name: string;
   updatedAt: string;
+}
+
+export interface ISelfRegisterUserDto {
+  /** @format email */
+  email: string;
+  /** @minLength 8 */
+  password: string;
+  userProfile: ISelfRegisterUserProfileDto;
+}
+
+export interface ISelfRegisterUserProfileDto {
+  /**
+   * @minLength 2
+   * @maxLength 255
+   */
+  firstName: string;
+  /**
+   * @minLength 2
+   * @maxLength 255
+   */
+  lastName: string;
+}
+
+export interface ISendForgotPasswordEmailResponse {
+  message: string;
 }
 
 export interface ISignInResponse {
@@ -63,6 +140,7 @@ export interface IUserProfileDto {
    * @maxLength 255
    */
   lastName: string;
+  roleId: number;
 }
 
 export interface IUserProfileResponse {
@@ -75,10 +153,32 @@ export interface IUserProfileResponse {
   updatedAt: string;
 }
 
+export interface IUserProfileUpdateDto {
+  /**
+   * @minLength 2
+   * @maxLength 255
+   */
+  firstName?: string;
+  /**
+   * @minLength 2
+   * @maxLength 255
+   */
+  lastName?: string;
+}
+
 export interface IUserResponse {
   createdAt: string;
   email: string;
   id: number;
   updatedAt: string;
   userProfile: IUserProfileResponse;
+}
+
+export interface IVerifyByTokenResponse {
+  message: string;
+}
+
+export interface IVerifyParams {
+  token: string;
+  type: string;
 }

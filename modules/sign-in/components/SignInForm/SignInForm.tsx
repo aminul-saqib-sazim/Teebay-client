@@ -1,7 +1,5 @@
 import React from "react";
 
-import { useTranslation } from "next-i18next";
-
 import { PasswordInput } from "@/shared/components/Form/PasswordInput";
 import { Button } from "@/shared/components/shadui/button";
 import {
@@ -17,13 +15,11 @@ import { Input } from "@/shared/components/shadui/input";
 import { useSignInForm } from "./SignInForm.hooks";
 
 export const SignInForm = () => {
-  const { t } = useTranslation("sign-in");
   const { form, onSubmit } = useSignInForm();
 
   return (
     <Form {...form}>
-      {t("signInText")}
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="space-y-6">
         <FormField
           control={form.control}
           name="email"
@@ -52,7 +48,9 @@ export const SignInForm = () => {
           )}
         />
 
-        <Button type="submit">Sign In</Button>
+        <Button type="submit" className="w-full">
+          Sign In
+        </Button>
       </form>
     </Form>
   );

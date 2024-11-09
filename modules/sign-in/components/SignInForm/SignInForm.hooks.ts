@@ -16,7 +16,7 @@ export const useSignInForm = () => {
   const form = useForm<TSignInFormFields>({
     defaultValues: signInFormInitialValues,
     resolver: signInFormValidationSchemaResolver,
-    reValidateMode: "onSubmit",
+    reValidateMode: "onBlur",
   });
   const dispatch = useAppDispatch();
   const [signIn] = useSignInMutation();
@@ -25,7 +25,7 @@ export const useSignInForm = () => {
   const onSubmit = async (values: TSignInFormFields) => {
     try {
       const data = await signIn(values).unwrap();
-      setInLocalStorage(data.accessToken, ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+      setInLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY, data.accessToken);
       dispatch(setUser(data.user));
       await getMe().unwrap();
     } catch (error) {
