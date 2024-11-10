@@ -144,6 +144,19 @@ export interface ITokenizedUser {
   userProfileId: number;
 }
 
+export interface IUpdateUserProfileDto {
+  /**
+   * @minLength 2
+   * @maxLength 255
+   */
+  firstName?: string;
+  /**
+   * @minLength 2
+   * @maxLength 255
+   */
+  lastName?: string;
+}
+
 export interface IUserProfileDto {
   /**
    * @minLength 2
@@ -166,19 +179,6 @@ export interface IUserProfileResponse {
   lastName: string;
   role: IRoleResponse;
   updatedAt: string;
-}
-
-export interface IUserProfileUpdateDto {
-  /**
-   * @minLength 2
-   * @maxLength 255
-   */
-  firstName?: string;
-  /**
-   * @minLength 2
-   * @maxLength 255
-   */
-  lastName?: string;
 }
 
 export interface IUserResponse {

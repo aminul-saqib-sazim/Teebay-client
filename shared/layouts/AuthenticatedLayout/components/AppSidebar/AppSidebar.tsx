@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ArrowRight } from "lucide-react";
 
 import { LanguageSelector } from "@/shared/components/LanguageSelector";
@@ -30,10 +32,10 @@ const AppSidebar = () => {
               {SIDEBAR_MENU_ITEMS.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

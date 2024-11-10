@@ -3,7 +3,7 @@ import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 export const SIDEBAR_MENU_ITEMS = [
   {
     title: "Home",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
@@ -23,7 +23,7 @@ export const SIDEBAR_MENU_ITEMS = [
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
 ];
