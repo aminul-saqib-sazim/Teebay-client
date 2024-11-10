@@ -1,4 +1,4 @@
-import React from "react";
+import { useRouter } from "next/router";
 
 import { PasswordInput } from "@/shared/components/Form/PasswordInput";
 import LoadingSpinner from "@/shared/components/LoadingSpinner/LoadingSpinner";
@@ -11,26 +11,32 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/components/shadui/form";
-import { Input } from "@/shared/components/shadui/input";
 
-import { useSignInForm } from "./SignInForm.hooks";
+import { useResetPasswordForm } from "./ResetPasswordForm.hooks";
 
-export const SignInForm = () => {
-  const { form, onSubmit } = useSignInForm();
+const ResetPasswordForm = () => {
+  const router = useRouter();
+  const token = router.query["token"] as string;
+
+  const { form, onSubmit } = useResetPasswordForm(token);
   const isSubmitting = form.formState.isSubmitting;
+
+  if (!token) {
+    return null;
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           disabled={isSubmitting}
           control={form.control}
-          name="email"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>New Password</FormLabel>
               <FormControl>
-                <Input placeholder="Email" type="email" {...field} />
+                <PasswordInput placeholder="New Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -40,12 +46,12 @@ export const SignInForm = () => {
         <FormField
           disabled={isSubmitting}
           control={form.control}
-          name="password"
+          name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Confirm New Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="Password" {...field} />
+                <PasswordInput placeholder="Confirm New Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -53,10 +59,12 @@ export const SignInForm = () => {
         />
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? <LoadingSpinner /> : null}
-          Sign In
+          {isSubmitting ? <LoadingSpinner className="text-white" /> : null}
+          Reset Password
         </Button>
       </form>
     </Form>
   );
 };
+
+export default ResetPasswordForm;

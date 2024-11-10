@@ -28,6 +28,16 @@ export enum EUserState {
   INACTIVE = "INACTIVE",
 }
 
+export enum EVerificationRequestStatus {
+  ACTIVE = "ACTIVE",
+  EXPIRED = "EXPIRED",
+}
+
+export enum EVerificationRequestType {
+  EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
+  RESET_PASSWORD = "RESET_PASSWORD",
+}
+
 export interface IFindAllUsersParams {
   /**
    * @min 1
@@ -39,6 +49,11 @@ export interface IFindAllUsersParams {
    * @default 1
    */
   page: number;
+}
+
+export interface IFindOneVerificationRequestParams {
+  token: string;
+  type: string;
 }
 
 export interface IForgotPasswordDto {
@@ -172,6 +187,20 @@ export interface IUserResponse {
   id: number;
   updatedAt: string;
   userProfile: IUserProfileResponse;
+}
+
+export interface IVerificationRequestResponse {
+  /** @format date-time */
+  createdAt: string;
+  id: number;
+  status: EVerificationRequestStatus;
+  token: string;
+  type: EVerificationRequestType;
+  /** @format date-time */
+  updatedAt: string;
+  user: {
+    id: number;
+  };
 }
 
 export interface IVerifyByTokenResponse {

@@ -1,8 +1,14 @@
 import { TApiResponse } from "@/shared/typedefs";
-import { ISelfRegisterUserDto, ISignInResponse, IUserResponse } from "@/shared/typedefs/api";
+import {
+  IForgotPasswordDto,
+  ISelfRegisterUserDto,
+  ISendForgotPasswordEmailResponse,
+  ISignInResponse,
+  IUserResponse,
+} from "@/shared/typedefs/api";
 
 import projectApi from "../api.config";
-import { TSignInRequestFields } from "./auth.types";
+import { TRequestPasswordFields, TSignInRequestFields } from "./auth.types";
 
 const authApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -23,8 +29,32 @@ const authApi = projectApi.injectEndpoints({
       }),
       transformResponse: (response: TApiResponse<ISignInResponse>) => response.data,
     }),
+
+    forgotPassword: builder.mutation<ISendForgotPasswordEmailResponse, IForgotPasswordDto>({
+      query: (data) => ({
+        url: "auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: TApiResponse<ISendForgotPasswordEmailResponse>) =>
+        response.data,
+    }),
+
+    resetPassword: builder.mutation<IUserResponse, TRequestPasswordFields>({
+      query: ({ token, password }) => ({
+        url: `auth/reset-password/${token}`,
+        method: "POST",
+        body: { password },
+      }),
+      transformResponse: (response: TApiResponse<IUserResponse>) => response.data,
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useSignInMutation, useSignUpMutation } = authApi;
+export const {
+  useSignInMutation,
+  useSignUpMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+} = authApi;

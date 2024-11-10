@@ -7,7 +7,12 @@ import { TCustomLinkProps } from "./CustomLink.types";
 const CustomLink = ({ label, className, anchorTagClassName, ...rest }: TCustomLinkProps) => (
   <Link {...rest} legacyBehavior>
     <div className={className}>
-      <a className={cn("text-black hover:underline hover:cursor-pointer", anchorTagClassName)}>
+      <a
+        className={cn(
+          "text-black font-bold hover:underline hover:cursor-pointer",
+          anchorTagClassName,
+        )}
+      >
         {label}
       </a>
     </div>

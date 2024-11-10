@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -17,15 +17,12 @@ import { ELocale, LANGUAGE_SELECTOR_OPTIONS } from "./LanguageSelector.constants
 
 export const LanguageSelector = () => {
   const router = useRouter();
-  const routerRef = useRef(router);
   const { i18n, t } = useTranslation();
   const [value, setValue] = useState(i18n.language ?? ELocale.ENGLISH);
 
   const changeLocale = useCallback(
     (locale: string) => {
-      const router = routerRef.current;
-
-      if (!router) return;
+      if (!router || !router.isReady || locale === router.locale) return;
 
       router.push(
         {
@@ -36,14 +33,16 @@ export const LanguageSelector = () => {
         { locale },
       );
     },
-    [routerRef],
+    [router],
   );
 
   useEffect(() => {
+    if (router.locale === value) return;
+
     changeLocale(value);
     i18n.changeLanguage(value);
     window.localStorage.setItem(I18N_LNG_LOCAL_STORAGE_KEY, value);
-  }, [value, i18n, changeLocale]);
+  }, [router, value, i18n, changeLocale]);
 
   useEffect(() => {
     if (i18n.language === value) return;
