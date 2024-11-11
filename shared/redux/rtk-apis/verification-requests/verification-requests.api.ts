@@ -2,6 +2,8 @@ import { TApiResponse } from "@/shared/typedefs";
 import {
   IFindOneVerificationRequestParams,
   IVerificationRequestResponse,
+  IVerifyByTokenResponse,
+  IVerifyParams,
 } from "@/shared/typedefs/api";
 
 import projectApi from "../api.config";
@@ -19,7 +21,17 @@ const verificationRequestsApi = projectApi.injectEndpoints({
       }),
       transformResponse: (response: TApiResponse<IVerificationRequestResponse>) => response.data,
     }),
+
+    verifyToken: builder.mutation<IVerifyByTokenResponse, IVerifyParams>({
+      query: ({ token, type }) => ({
+        url: `verification-requests/verify/${token}`,
+        method: "POST",
+        params: { type },
+      }),
+      transformResponse: (response: TApiResponse<IVerifyByTokenResponse>) => response.data,
+    }),
   }),
 });
 
-export const { useFindOneVerificationRequestQuery } = verificationRequestsApi;
+export const { useFindOneVerificationRequestQuery, useVerifyTokenMutation } =
+  verificationRequestsApi;
