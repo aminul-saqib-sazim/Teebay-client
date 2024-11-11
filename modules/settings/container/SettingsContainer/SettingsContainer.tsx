@@ -1,5 +1,5 @@
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
-import LoadingSpinner from "@/shared/components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "@/shared/components/LoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
 import { Form } from "@/shared/components/shadui/form";
 import { useGetUserProfileQuery } from "@/shared/redux/rtk-apis/user-profiles/user-profiles.api";

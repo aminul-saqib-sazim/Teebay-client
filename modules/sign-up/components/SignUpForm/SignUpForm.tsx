@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PasswordInput } from "@/shared/components/Form/PasswordInput";
-import LoadingSpinner from "@/shared/components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "@/shared/components/LoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
 import {
   Form,

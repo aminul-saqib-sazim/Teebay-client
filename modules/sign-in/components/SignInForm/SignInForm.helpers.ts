@@ -10,7 +10,7 @@ export const signInFormInitialValues: TSignInFormFields = {
 
 export const signInFormValidationSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Required"),
-  password: z.string().min(8, "Must be at least 8 characters long"),
+  password: z.string().min(1, "Required"),
 });
 
 export const signInFormValidationSchemaResolver = zodResolver(signInFormValidationSchema);

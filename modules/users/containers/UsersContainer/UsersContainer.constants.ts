@@ -1,0 +1,1 @@
+export const PAGINATION_LIMIT_OPTIONS = [5, 10, 20, 50, 100];

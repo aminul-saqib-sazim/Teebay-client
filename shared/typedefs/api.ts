@@ -1,15 +1,3 @@
-export interface IAdminFindAllUserResponse {
-  data: IUserResponse[];
-  meta: IPaginationMetadataResponse;
-}
-
-export interface IAdminUpdateUserDto {
-  /** @minLength 8 */
-  password?: string;
-  roleId?: number;
-  state?: EUserState;
-}
-
 export enum EAllowedMimeTypes {
   ApplicationPdf = "application/pdf",
   ImagePng = "image/png",
@@ -49,6 +37,7 @@ export interface IFindAllUsersParams {
    * @default 1
    */
   page: number;
+  state?: EUserState;
 }
 
 export interface IFindOneVerificationRequestParams {
@@ -136,12 +125,33 @@ export interface ISignInResponse {
   user: ITokenizedUser;
 }
 
+export interface ISuperuserFindAllUserResponse {
+  data: ISuperuserUserResponse[];
+  meta: IPaginationMetadataResponse;
+}
+
+export interface ISuperuserUserResponse {
+  createdAt: string;
+  email: string;
+  id: number;
+  state: EUserState;
+  updatedAt: string;
+  userProfile: IUserProfileResponse;
+}
+
 export interface ITokenizedUser {
   claim: EUserRole;
   claimId: number;
   email: string;
   id: number;
   userProfileId: number;
+}
+
+export interface IUpdateUserAsSuperuserDto {
+  /** @minLength 8 */
+  password?: string;
+  roleId?: number;
+  state?: EUserState;
 }
 
 export interface IUpdateUserProfileDto {

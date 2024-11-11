@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { LanguageSelector } from "@/shared/components/LanguageSelector";
+import LoadingSpinner from "@/shared/components/LoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
 import {
   Sidebar,
@@ -15,12 +16,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/components/shadui/sidebar";
+import { useSessionContext } from "@/shared/components/wrappers/AppInitializer/AppInitializerContext";
 import { useSignOut } from "@/shared/hooks/useSignOut";
 
-import { SIDEBAR_MENU_ITEMS } from "./AppSidebar.constants";
+import { getSidebarMenuItem } from "./AppSidebar.constants";
 
 const AppSidebar = () => {
+  const { isLoading, user } = useSessionContext();
   const { signOut } = useSignOut();
+
+  if (isLoading || !user) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Sidebar>
@@ -29,7 +36,7 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {SIDEBAR_MENU_ITEMS.map((item) => (
+              {getSidebarMenuItem(user.claim).map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>

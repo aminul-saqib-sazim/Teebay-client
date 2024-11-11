@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 
 import { NextPage } from "next";
 import { AppProps } from "next/app";
+import { ColumnDef } from "@tanstack/react-table";
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
@@ -60,4 +61,9 @@ export type NextApplicationPage<P = unknown, IP = P> = NextPage<P, IP> & {
 export type TCustomAppProps<P = unknown> = AppProps & {
   Component: NextApplicationPage;
   pageProps: P;
+};
+
+export type TDataTableProps<TData, TValue> = {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 };
