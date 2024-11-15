@@ -172,3 +172,28 @@ yarn start
 
 Valid subjects:
 ``build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test``
+
+## Build Actions (Local)
+### Running Build Actions with the Script
+- We have included a script (build-test-lint.sh) in the root directory to streamline the process of building, linting, and testing the project.
+- To use the script, follow these steps:
+
+  1. Ensure the script is executable. If not, make it executable by running:
+     ```bash
+     chmod +x ./build-test-lint.sh
+     ```
+  2. If you don't use tmux, skip to the next step.
+     - If you do use tmux, make sure you run this script outside any other tmux sessions
+  3. Run the script:
+     ```bash
+     ./build-test-lint.sh
+     ```
+     This will:
+       - Start a new tmux session named `build-test-lint`.
+       - Open three panes:
+         - Pane 1: Builds the project.
+         - Pane 2: Runs lint checks.
+         - Pane 3: Executes tests.
+  4. Once the actions are complete, you can:
+     - Manually check the output in each pane for any errors or failures.
+     - If necessary, take screenshot of the screen and attach the screenshot to your pull request (PR).
