@@ -7,21 +7,32 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    env:
+      YARN_CACHE_FOLDER: ${{ github.workspace }}/build/.yarn-cache
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
-        id: setup-node
+        uses: ./.github/actions/setup-nvm
+
+      - name: Clean yarn cache
+        run: yarn cache clean
+
+      - name: Cache yarn dependencies
+        id: yarn-cache
+        uses: actions/cache@v3
         with:
-          cache: npm
-          node-version-file: ".nvmrc"
+          path: |
+            node_modules
+          key: ${{ runner.os }}-yarn-deps-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-deps-build-
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Build
-        run: npm run build
+        run: yarn build
