@@ -1,7 +1,7 @@
 import i18nConfig from "./next-i18next.config.mjs";
 import { configureRuntimeEnv } from "next-runtime-env/build/configure.js";
-
 import { execSync } from "child_process";
+import withPWA from "next-pwa";
 
 configureRuntimeEnv();
 
@@ -33,8 +33,46 @@ const cspHeader = `
     connect-src 'self' ${getConnectSrcCSPConfig()};
 `;
 
+const withPWAConfig = withPWA({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+  runtimeCaching: [
+    {
+      urlPattern: ({ url }) => url.pathname.startsWith("/api"),
+      handler: "NetworkFirst",
+      options: {
+        cacheName: "api-cache",
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+    {
+      urlPattern: /\.(js|css|png|jpg|jpeg|svg|gif|ico|json)$/,
+      handler: "StaleWhileRevalidate",
+      options: {
+        cacheName: "static-assets",
+      },
+    },
+    {
+      urlPattern: /^https?.*/,
+      handler: "NetworkFirst",
+      options: {
+        cacheName: "pages-cache",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+  ],
+});
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withPWAConfig({
   generateBuildId: () => execSync("git rev-parse HEAD").toString().trim(),
 
   webpack: (config, { buildId }) => {
@@ -85,6 +123,6 @@ const nextConfig = {
       },
     ];
   },
-};
+});
 
 export default nextConfig;
