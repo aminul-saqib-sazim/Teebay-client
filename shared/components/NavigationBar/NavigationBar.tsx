@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { Menu } from "lucide-react";
+import { FaSignInAlt } from "react-icons/fa";
 
 import { LanguageSelector } from "../LanguageSelector";
 import { Button } from "../shadui/button";
@@ -41,7 +42,7 @@ const NavigationBar = () => {
               <span className="sr-only">Toggle Menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="pr-0">
+          <SheetContent side="left" className="pr-8">
             <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
               <span className="font-bold">My Website</span>
             </Link>
@@ -86,6 +87,7 @@ const NavigationBar = () => {
                 <SignedInUserAvatarAndMenu user={user} />
               ) : (
                 <Button className="hidden md:inline-flex" onClick={() => router.push("/sign-in")}>
+                  <FaSignInAlt />
                   Sign In
                 </Button>
               ))}

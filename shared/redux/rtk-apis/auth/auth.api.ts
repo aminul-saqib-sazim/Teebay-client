@@ -8,7 +8,11 @@ import {
 } from "@/shared/typedefs/api";
 
 import projectApi from "../api.config";
-import { TRequestPasswordFields, TSignInRequestFields } from "./auth.types";
+import {
+  TRequestPasswordFields,
+  TSignInRequestFields,
+  TSignInWithGoogleParams,
+} from "./auth.types";
 
 const authApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,6 +28,15 @@ const authApi = projectApi.injectEndpoints({
     signIn: builder.mutation<ISignInResponse, TSignInRequestFields>({
       query: (data) => ({
         url: "auth/sign-in",
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: TApiResponse<ISignInResponse>) => response.data,
+    }),
+
+    signInWithGoogle: builder.mutation<ISignInResponse, TSignInWithGoogleParams>({
+      query: (data) => ({
+        url: "auth/google/sign-in",
         method: "POST",
         body: data,
       }),
@@ -57,4 +70,5 @@ export const {
   useSignUpMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useSignInWithGoogleMutation,
 } = authApi;

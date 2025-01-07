@@ -8,3 +8,9 @@ export type TSignInRequestFields = {
 export type TRequestPasswordFields = IResetPasswordDto & {
   token: string;
 };
+
+export type TSignInWithGoogleParams = {
+  code: string;
+  scope: string;
+  state?: string;
+};

@@ -1,4 +1,5 @@
 import CustomLink from "@/shared/components/CustomLink/CustomLink";
+import GoogleOAuthButton from "@/shared/components/OAuthSignin/GoogleOAuthButton";
 import {
   Card,
   CardContent,
@@ -7,6 +8,7 @@ import {
   CardTitle,
 } from "@/shared/components/shadui/card";
 import { Separator } from "@/shared/components/shadui/separator";
+import { getGoogleOAuthSigninParams } from "@/shared/oauth/oauth.helpers";
 
 import SignUpForm from "../components/SignUpForm";
 
@@ -19,6 +21,15 @@ const SignUpContainer = () => (
       </CardHeader>
       <CardContent>
         <SignUpForm />
+
+        <Separator className="my-4" />
+
+        <div className="flex flex-col space-y-4">
+          <GoogleOAuthButton
+            label="Sign Up with Google"
+            googleOAuthParams={getGoogleOAuthSigninParams()}
+          />
+        </div>
 
         <Separator className="my-4" />
 

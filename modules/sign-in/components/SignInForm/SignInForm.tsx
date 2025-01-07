@@ -1,5 +1,7 @@
 import React from "react";
 
+import { FaSignInAlt } from "react-icons/fa";
+
 import { PasswordInput } from "@/shared/components/Form/PasswordInput";
 import LoadingSpinner from "@/shared/components/LoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
@@ -54,6 +56,7 @@ export const SignInForm = () => {
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? <LoadingSpinner /> : null}
+          <FaSignInAlt />
           Sign In
         </Button>
       </form>
