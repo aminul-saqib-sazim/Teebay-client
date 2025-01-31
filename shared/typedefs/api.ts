@@ -1,3 +1,9 @@
+export interface IChangePasswordDto {
+  currentPassword: string;
+  /** @minLength 8 */
+  newPassword: string;
+}
+
 export enum EAllowedMimeTypes {
   ApplicationPdf = "application/pdf",
   ImagePng = "image/png",
@@ -59,6 +65,15 @@ export interface IPaginationMetadataResponse {
   totalPages: number;
 }
 
+export interface IPermissionResponse {
+  /** @format date-time */
+  createdAt: string;
+  id: number;
+  name: string;
+  /** @format date-time */
+  updatedAt: string;
+}
+
 export interface IPresignedUrlFile {
   name: string;
   type: EAllowedMimeTypes;
@@ -89,10 +104,23 @@ export interface IResetPasswordDto {
 }
 
 export interface IRoleResponse {
+  /** @format date-time */
   createdAt: string;
   id: number;
   name: string;
+  /** @format date-time */
   updatedAt: string;
+}
+
+export interface IRolesWithUsersAndPermissionsResponse {
+  permissions: IPermissionResponse[];
+  roles: IRolesWithUsersCount[];
+}
+
+export interface IRolesWithUsersCount {
+  activeUsersCount: number;
+  inactiveUsersCount: number;
+  role: IRoleResponse;
 }
 
 export interface ISelfRegisterUserDto {
@@ -131,10 +159,12 @@ export interface ISuperuserFindAllUserResponse {
 }
 
 export interface ISuperuserUserResponse {
+  /** @format date-time */
   createdAt: string;
   email: string;
   id: number;
   state: EUserState;
+  /** @format date-time */
   updatedAt: string;
   userProfile: IUserProfileResponse;
 }
@@ -145,6 +175,12 @@ export interface ITokenizedUser {
   email: string;
   id: number;
   userProfileId: number;
+}
+
+export interface IUpdateRolesPermissionsDto {
+  permissionsToAddIds: number[];
+  permissionsToRemoveIds: number[];
+  roleId: number;
 }
 
 export interface IUpdateUserAsSuperuserDto {
@@ -182,19 +218,23 @@ export interface IUserProfileDto {
 }
 
 export interface IUserProfileResponse {
+  /** @format date-time */
   createdAt: string;
   email: string;
   firstName: string;
   id: number;
   lastName: string;
   role: IRoleResponse;
+  /** @format date-time */
   updatedAt: string;
 }
 
 export interface IUserResponse {
+  /** @format date-time */
   createdAt: string;
   email: string;
   id: number;
+  /** @format date-time */
   updatedAt: string;
   userProfile: IUserProfileResponse;
 }
