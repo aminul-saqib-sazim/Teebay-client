@@ -197,3 +197,11 @@ Valid subjects:
   4. Once the actions are complete, you can:
      - Manually check the output in each pane for any errors or failures.
      - If necessary, take screenshot of the screen and attach the screenshot to your pull request (PR).
+
+## Community Shadcn/UI Components
+
+For an extensive collection of shadcn/ui-compatible components and community-driven resources, please refer to the following repository:
+
+- [awesome-shadcn-ui: A curated list of resources related to shadcn/ui](https://github.com/birobirobiro/awesome-shadcn-ui)
+
+This repository offers a curated selection of ready-to-use components, templates, and additional materials contributed by the broader community.
