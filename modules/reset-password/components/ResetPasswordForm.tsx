@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { parseAsString, useQueryState } from "nuqs";
 
 import { PasswordInput } from "@/shared/components/Form/PasswordInput";
 import LoadingSpinner from "@/shared/components/LoadingSpinner";
@@ -15,8 +15,7 @@ import {
 import { useResetPasswordForm } from "./ResetPasswordForm.hooks";
 
 const ResetPasswordForm = () => {
-  const router = useRouter();
-  const token = router.query["token"] as string;
+  const [token] = useQueryState("token", parseAsString.withDefault(""));
 
   const { form, onSubmit } = useResetPasswordForm(token);
   const isSubmitting = form.formState.isSubmitting;

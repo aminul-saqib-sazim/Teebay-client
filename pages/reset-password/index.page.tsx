@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 
+import { parseAsString, useQueryState } from "nuqs";
+
 import ResetPasswordContainer from "@/modules/reset-password/containers";
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/components/shadui/card";
@@ -10,12 +12,13 @@ import { EVerificationRequestType } from "@/shared/typedefs/api";
 
 const ResetPasswordPage: NextApplicationPage = () => {
   const router = useRouter();
-  const { token } = router.query;
+  const [token] = useQueryState("token", parseAsString.withDefault(""));
+
   const isReady = router.isReady;
 
   const { isFetching, isLoading, isUninitialized, isError } = useFindOneVerificationRequestQuery(
     {
-      token: token as string,
+      token: token,
       type: EVerificationRequestType.RESET_PASSWORD,
     },
     {

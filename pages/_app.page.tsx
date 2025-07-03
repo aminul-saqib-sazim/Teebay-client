@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import i18nConfig from "../next-i18next.config.mjs";
 import { appWithTranslation } from "next-i18next";
+import { NuqsAdapter } from "nuqs/adapters/next/pages";
 
 import { Provider as ReduxProvider } from "react-redux";
 
@@ -25,12 +26,14 @@ function App(props: TCustomAppProps) {
 
   return (
     <ReduxProvider store={store}>
-      <AppInitializer>
-        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-          <Toaster duration={NOTIFICATION_AUTO_CLOSE_TIMEOUT_IN_MILLISECONDS} />
-          {Component.Guard ? <Component.Guard>{component}</Component.Guard> : component}
-        </ThemeProvider>
-      </AppInitializer>
+      <NuqsAdapter>
+        <AppInitializer>
+          <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+            <Toaster duration={NOTIFICATION_AUTO_CLOSE_TIMEOUT_IN_MILLISECONDS} />
+            {Component.Guard ? <Component.Guard>{component}</Component.Guard> : component}
+          </ThemeProvider>
+        </AppInitializer>
+      </NuqsAdapter>
     </ReduxProvider>
   );
 }

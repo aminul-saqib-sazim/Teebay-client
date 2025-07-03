@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
-import { useRouter } from "next/router";
-
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
+import { useQueryStates, parseAsInteger, parseAsStringEnum } from "nuqs";
 
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
@@ -34,12 +33,15 @@ import UsersTable from "../../components/UsersTable";
 import { PAGINATION_LIMIT_OPTIONS } from "./UsersContainer.constants";
 
 const UsersContainer = () => {
-  const router = useRouter();
-  const { page = 1, limit = 10, userState = undefined } = router.query;
+  const [{ page, limit, userState }, setQueryStates] = useQueryStates({
+    page: parseAsInteger.withDefault(1),
+    limit: parseAsInteger.withDefault(10),
+    userState: parseAsStringEnum<EUserState>(Object.values(EUserState)),
+  });
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery({
-    limit: limit as number,
-    page: page as number,
-    state: userState as EUserState | undefined,
+    limit,
+    page,
+    state: userState ?? undefined,
   });
   const { data: roles, isLoading: isRolesLoading } = useGetAllRolesQuery();
 
@@ -49,17 +51,11 @@ const UsersContainer = () => {
   const [isCreateUserDialogOpen, setIsCreateUserDialogOpen] = useState(false);
 
   const handleLimitChange = (value: string) => {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, limit: value, page: 1 },
-    });
+    setQueryStates({ limit: parseInt(value), page: 1 });
   };
 
   const handleUserStateChange = (value: string) => {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, userState: value, page: 1 },
-    });
+    setQueryStates({ userState: value as EUserState, page: 1 });
   };
 
   const usersTableColumns: ColumnDef<ISuperuserUserResponse>[] = [

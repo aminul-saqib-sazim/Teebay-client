@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useQueryState } from "nuqs";
 
 import { cn } from "@/lib/utils";
 
@@ -6,13 +6,12 @@ import CustomPagination from "../../CustomPagination";
 import { ITablePaginationProps } from "./TablePagination.interfaces";
 
 const TablePagination: React.FC<ITablePaginationProps> = ({ paginationMetadata, className }) => {
-  const router = useRouter();
+  const [_page, setPage] = useQueryState("page");
+  const [_limit, setLimit] = useQueryState("limit");
 
   const handlePageClick = (page: number) => {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, page: String(page), limit: paginationMetadata.itemsPerPage },
-    });
+    setPage(String(page));
+    setLimit(String(paginationMetadata.itemsPerPage));
   };
 
   const handleNextClick = () => {

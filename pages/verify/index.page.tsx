@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useRouter } from "next/router";
+import { parseAsString, useQueryStates } from "nuqs";
 
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/shadui/card";
@@ -12,11 +12,13 @@ import {
 import { NextApplicationPage } from "@/shared/typedefs";
 
 const VerifyTokenPage: NextApplicationPage = () => {
-  const router = useRouter();
-  const { token, type } = router.query;
+  const [{ token, type }] = useQueryStates({
+    token: parseAsString.withDefault(""),
+    type: parseAsString.withDefault(""),
+  });
 
   const { error, isLoading, isUninitialized, isFetching } = useFindOneVerificationRequestQuery(
-    { token: token as string, type: type as string },
+    { token: token, type: type },
     { skip: !token || !type },
   );
 

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { useQueryStates, parseAsString } from "nuqs";
 import { toast } from "sonner";
 
 import CustomButton from "@/shared/components/Form/CustomButton";
@@ -20,7 +21,12 @@ import { setInLocalStorage } from "@/shared/utils/localStorage";
 
 const GoogleCallbackContainer = () => {
   const router = useRouter();
-  const { code, scope, state, error } = router.query;
+  const [{ code, scope, state, error }] = useQueryStates({
+    code: parseAsString.withDefault(""),
+    scope: parseAsString.withDefault(""),
+    state: parseAsString.withDefault(""),
+    error: parseAsString.withDefault(""),
+  });
 
   const dispatch = useAppDispatch();
   const [signInWithGoogleMutation] = useSignInWithGoogleMutation();
@@ -54,15 +60,7 @@ const GoogleCallbackContainer = () => {
   );
 
   useEffect(() => {
-    if (
-      !code ||
-      !scope ||
-      !state ||
-      typeof code !== "string" ||
-      typeof scope !== "string" ||
-      typeof state !== "string"
-    )
-      return;
+    if (!code || !scope || !state) return;
 
     if (error) {
       setCallBackError(error);
