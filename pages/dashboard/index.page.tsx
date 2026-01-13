@@ -1,12 +1,11 @@
 import dynamic from "next/dynamic";
 
-import { withAllowedRoles } from "@/shared/components/hocs/withAllowedRoles";
 import LoadingSpinner from "@/shared/components/LoadingSpinner";
-import { useSessionContext } from "@/shared/components/wrappers/AppInitializer/AppInitializerContext";
-import AuthGuard from "@/shared/components/wrappers/AuthGuard";
+import ProtectedRoute from "@/shared/components/wrappers/ProtectedRoute";
 import AuthenticatedLayout from "@/shared/layouts/AuthenticatedLayout";
+import { useAuth } from "@/shared/providers/AuthProvider";
+import { EUserRole } from "@/shared/redux/rtk-apis/roles/roles.enums";
 import { NextApplicationPage } from "@/shared/typedefs";
-import { EUserRole } from "@/shared/typedefs/api";
 
 const DashboardContainer = dynamic(
   () => import("@/modules/dashboard/containers/DashboardContainer"),
@@ -23,23 +22,24 @@ const SuperuserDashboardContainer = dynamic(
 );
 
 const DashboardPage: NextApplicationPage = () => {
-  const { user } = useSessionContext();
+  const { user, activeOrganizationRole } = useAuth();
 
   if (!user) {
     return null;
   }
 
-  switch (user.claim) {
-    case EUserRole.SUPER_USER:
+  switch (activeOrganizationRole) {
+    case EUserRole.OWNER:
       return <SuperuserDashboardContainer />;
     case EUserRole.ADMIN:
+    case EUserRole.MEMBER:
       return <DashboardContainer />;
     default:
-      return null;
+      return <DashboardContainer />;
   }
 };
 
 DashboardPage.Layout = AuthenticatedLayout;
-DashboardPage.Guard = withAllowedRoles(AuthGuard, [EUserRole.ADMIN, EUserRole.SUPER_USER]);
+DashboardPage.Guard = ProtectedRoute;
 
 export default DashboardPage;

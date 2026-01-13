@@ -12,7 +12,7 @@ export const useSignOut = () => {
   const dispatch = useAppDispatch();
 
   const signOut = useCallback(
-    (args?: ISignOutArgs) => {
+    async (args?: ISignOutArgs) => {
       const {
         reason = ESignOutReason.UserSignedOut,
         redirectRoute = SIGN_IN_ROUTE,
@@ -20,7 +20,7 @@ export const useSignOut = () => {
         shouldRedirect = true,
       } = args ?? {};
 
-      signOutImpl({
+      await signOutImpl({
         dispatch,
         router,
         reason,

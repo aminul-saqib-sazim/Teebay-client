@@ -1,9 +1,8 @@
 import React from "react";
 
-import { FaLink } from "react-icons/fa";
+import { FaGoogle, FaLink } from "react-icons/fa";
 
 import CustomLink from "@/shared/components/CustomLink/CustomLink";
-import GoogleOAuthButton from "@/shared/components/OAuthSignin/GoogleOAuthButton";
 import { Button } from "@/shared/components/shadui/button";
 import {
   Card,
@@ -13,12 +12,19 @@ import {
   CardContent,
 } from "@/shared/components/shadui/card";
 import { Separator } from "@/shared/components/shadui/separator";
-import { getGoogleOAuthSigninParams } from "@/shared/oauth/oauth.helpers";
+import { AUTH_CALLBACK_ROUTE } from "@/shared/constants/routes.constants";
+import { signIn } from "@/shared/lib/auth-client";
 
 import { SignInForm } from "../components/SignInForm";
 
 const SignInContainer = () => {
-  const googleOAuthParams = getGoogleOAuthSigninParams();
+  const handleGoogleSignIn = async () => {
+    const callbackURL = `${window.location.origin}${AUTH_CALLBACK_ROUTE}`;
+    await signIn.social({
+      provider: "google",
+      callbackURL,
+    });
+  };
 
   return (
     <div className="flex-1 flex items-center justify-center p-4">
@@ -37,7 +43,9 @@ const SignInContainer = () => {
             <Button variant="outline">
               <FaLink /> Sign In with Magic Link
             </Button>
-            <GoogleOAuthButton label="Sign In with Google" googleOAuthParams={googleOAuthParams} />
+            <Button variant="outline" onClick={handleGoogleSignIn}>
+              <FaGoogle /> Sign In with Google
+            </Button>
           </div>
 
           <Separator className="my-4" />

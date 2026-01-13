@@ -1,1 +1,2 @@
-export { default } from "./CreateUserDialog";
+export { default as InviteUserDialog } from "./CreateUserDialog";
+export * from "./CreateUserDialog.interfaces";

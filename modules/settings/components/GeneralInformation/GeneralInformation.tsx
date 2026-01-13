@@ -2,9 +2,9 @@ import { Avatar, AvatarFallback } from "@/shared/components/shadui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/shadui/card";
 import { Input } from "@/shared/components/shadui/input";
 import { Label } from "@/shared/components/shadui/label";
-import { IUserProfileResponse } from "@/shared/typedefs/api";
+import { ICurrentUserProfileResponse } from "@/shared/redux/rtk-apis/user-profiles/user-profiles.interfaces";
 
-const GeneralInformation = ({ userProfile }: { userProfile: IUserProfileResponse }) => (
+const GeneralInformation = ({ userProfile }: { userProfile: ICurrentUserProfileResponse }) => (
   <Card className="mb-6 w-full">
     <CardHeader>
       <CardTitle>General Information</CardTitle>

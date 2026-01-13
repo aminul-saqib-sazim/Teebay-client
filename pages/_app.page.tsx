@@ -10,6 +10,7 @@ import { Toaster } from "@/shared/components/shadui/sonner";
 import AppInitializer from "@/shared/components/wrappers/AppInitializer";
 import ThemeProvider from "@/shared/components/wrappers/ThemeProvider";
 import { NOTIFICATION_AUTO_CLOSE_TIMEOUT_IN_MILLISECONDS } from "@/shared/constants/app.constants";
+import { AuthProvider } from "@/shared/providers/AuthProvider";
 import { store } from "@/shared/redux/store";
 import { TCustomAppProps } from "@/shared/typedefs";
 
@@ -28,10 +29,12 @@ function App(props: TCustomAppProps) {
     <ReduxProvider store={store}>
       <NuqsAdapter>
         <AppInitializer>
-          <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-            <Toaster duration={NOTIFICATION_AUTO_CLOSE_TIMEOUT_IN_MILLISECONDS} />
-            {Component.Guard ? <Component.Guard>{component}</Component.Guard> : component}
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+              <Toaster duration={NOTIFICATION_AUTO_CLOSE_TIMEOUT_IN_MILLISECONDS} />
+              {Component.Guard ? <Component.Guard>{component}</Component.Guard> : component}
+            </ThemeProvider>
+          </AuthProvider>
         </AppInitializer>
       </NuqsAdapter>
     </ReduxProvider>

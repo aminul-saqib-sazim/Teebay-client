@@ -1,29 +1,44 @@
-import { TApiResponse } from "@/shared/typedefs";
-import {
-  ISuperuserFindAllUserResponse,
-  IFindAllUsersParams,
-  ITokenizedUser,
-  IUserResponse,
-  IRegisterUserDto,
-} from "@/shared/typedefs/api";
+import { TApiResponse, TPaginationMetadata } from "@/shared/typedefs";
 
 import projectApi from "../api.config";
-import { TUpdateUserAsSuperuserParams } from "./users.types";
+import {
+  IBackendPaginationMeta,
+  IInviteUserDto,
+  IListUsersParams,
+  IPaginatedUsersResponse,
+  IUpdateUserDto,
+  IUserResponse,
+} from "./users.interfaces";
+
+const transformPaginationMeta = (meta: IBackendPaginationMeta): TPaginationMetadata => ({
+  currentPage: meta.page,
+  itemsPerPage: meta.limit,
+  totalItems: meta.total,
+  totalPages: meta.totalPages,
+  hasNextPage: meta.page < meta.totalPages,
+  hasPreviousPage: meta.page > 1,
+});
 
 const usersApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
-    me: builder.query<ITokenizedUser, void>({
+    me: builder.query<IUserResponse, void>({
       query: () => "users/me",
-      transformResponse: (response: TApiResponse<ITokenizedUser>) => response.data,
+      transformResponse: (response: TApiResponse<IUserResponse>) => response.data,
+      providesTags: ["UserProfile"],
     }),
 
-    getUsers: builder.query<ISuperuserFindAllUserResponse, Partial<IFindAllUsersParams>>({
+    getUsers: builder.query<IPaginatedUsersResponse, IListUsersParams>({
       query: (params) => ({
         url: "users",
         method: "GET",
         params,
       }),
-      transformResponse: (response: TApiResponse<ISuperuserFindAllUserResponse>) => response.data,
+      transformResponse: (
+        response: TApiResponse<{ data: IUserResponse[]; meta: IBackendPaginationMeta }>,
+      ): IPaginatedUsersResponse => ({
+        data: response.data.data,
+        meta: transformPaginationMeta(response.data.meta),
+      }),
       providesTags: (result) =>
         result
           ? [
@@ -33,23 +48,27 @@ const usersApi = projectApi.injectEndpoints({
           : [{ type: "Users" as const, id: "LIST" }],
     }),
 
-    updateUser: builder.mutation<IUserResponse, TUpdateUserAsSuperuserParams>({
-      query: (data) => ({
-        url: `users/${data.id}`,
+    updateUser: builder.mutation<IUserResponse, IUpdateUserDto & { id: string }>({
+      query: ({ id, ...data }) => ({
+        url: `users/${id}`,
         method: "PATCH",
         body: data,
       }),
       transformResponse: (response: TApiResponse<IUserResponse>) => response.data,
-      invalidatesTags: (result, _, __) => [{ type: "User" as const, id: result?.id }],
+      invalidatesTags: (result) => [
+        { type: "User" as const, id: result?.id },
+        { type: "Users" as const, id: "LIST" },
+      ],
     }),
 
-    createUser: builder.mutation<IUserResponse, IRegisterUserDto>({
+    inviteUser: builder.mutation<{ success: boolean; message: string }, IInviteUserDto>({
       query: (data) => ({
         url: "users",
         method: "POST",
         body: data,
       }),
-      transformResponse: (response: TApiResponse<IUserResponse>) => response.data,
+      transformResponse: (response: TApiResponse<{ success: boolean; message: string }>) =>
+        response.data,
       invalidatesTags: [{ type: "Users" as const, id: "LIST" }],
     }),
   }),
@@ -61,5 +80,5 @@ export const {
   useLazyMeQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
-  useCreateUserMutation,
+  useInviteUserMutation,
 } = usersApi;

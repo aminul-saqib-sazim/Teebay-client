@@ -8,9 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/components/shadui/dropdown-menu";
 import { useSignOut } from "@/shared/hooks/useSignOut";
-import { ITokenizedUser } from "@/shared/typedefs/api";
+import { TSessionUser } from "@/shared/providers/AuthProvider.types";
 
-const SignedInUserAvatarAndMenu = ({ user }: { user: ITokenizedUser }) => {
+const SignedInUserAvatarAndMenu = ({ user }: { user: TSessionUser }) => {
   const router = useRouter();
   const { signOut } = useSignOut();
 

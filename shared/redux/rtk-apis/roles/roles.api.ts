@@ -1,15 +1,17 @@
 import { TApiResponse } from "@/shared/typedefs";
-import { IRoleResponse } from "@/shared/typedefs/api";
 
 import projectApi from "../api.config";
+import { EUserRole } from "./roles.enums";
 
 const rolesApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllRoles: builder.query<IRoleResponse[], void>({
-      query: () => "/roles",
-      transformResponse: (response: TApiResponse<IRoleResponse[]>) => response.data,
+    getRoles: builder.query<EUserRole[], void>({
+      query: () => "roles",
+      transformResponse: (response: TApiResponse<EUserRole[]>) => response.data,
+      providesTags: ["Roles"],
     }),
   }),
+  overrideExisting: false,
 });
 
-export const { useGetAllRolesQuery } = rolesApi;
+export const { useGetRolesQuery } = rolesApi;

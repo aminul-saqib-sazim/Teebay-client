@@ -6,17 +6,18 @@ import { useRouter } from "next/router";
 import { Menu } from "lucide-react";
 import { FaSignInAlt } from "react-icons/fa";
 
+import { useAuth } from "@/shared/providers/AuthProvider";
+
 import { LanguageSelector } from "../LanguageSelector";
 import { Button } from "../shadui/button";
 import { Separator } from "../shadui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "../shadui/sheet";
-import { useSessionContext } from "../wrappers/AppInitializer/AppInitializerContext";
 import SignedInUserAvatarAndMenu from "./components/SignedInUserAvatarAndMenu";
 
 const NavigationBar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const router = useRouter();
-  const { isLoading, user } = useSessionContext();
+  const { isLoading, user } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

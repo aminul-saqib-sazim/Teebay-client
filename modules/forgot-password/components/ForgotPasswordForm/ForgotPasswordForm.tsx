@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/shared/components/LoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
 import {
   Form,
@@ -12,11 +13,11 @@ import { Input } from "@/shared/components/shadui/input";
 import { useForgotPasswordForm } from "./ForgotPasswordForm.hooks";
 
 const ForgotPasswordForm = () => {
-  const { form, onSubmit, result } = useForgotPasswordForm();
+  const { form, onSubmit, isSuccess } = useForgotPasswordForm();
   const isSubmitting = form.formState.isSubmitting;
   const email = form.watch("email");
 
-  if (result.data && !result.error && email) {
+  if (isSuccess && email) {
     return (
       <div className="w-full h-full grid place-items-center">
         <p className="text text-primary text-md">
@@ -30,6 +31,7 @@ const ForgotPasswordForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
+          disabled={isSubmitting}
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -44,6 +46,7 @@ const ForgotPasswordForm = () => {
         />
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? <LoadingSpinner /> : null}
           Send Reset Link
         </Button>
       </form>

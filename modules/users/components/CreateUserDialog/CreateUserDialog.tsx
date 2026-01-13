@@ -1,11 +1,9 @@
-import React from "react";
-
-import { PasswordInput } from "@/shared/components/Form/PasswordInput";
 import LoadingSpinner from "@/shared/components/LoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/shadui/dialog";
@@ -26,24 +24,27 @@ import {
   SelectValue,
 } from "@/shared/components/shadui/select";
 
-import { useCreateUserForm } from "./CreateUserDialog.hooks";
-import { ICreateUserDialogProps } from "./CreateUserDialog.types";
+import { useInviteUserForm } from "./CreateUserDialog.hooks";
+import { IInviteUserDialogProps } from "./CreateUserDialog.interfaces";
 
-const CreateUserDialog = ({ isOpen, onOpenChange, roles }: ICreateUserDialogProps) => {
-  const { form, onSubmit } = useCreateUserForm({ onOpenChange });
+const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
+  const { form, onSubmit } = useInviteUserForm({ onOpenChange });
   const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New User</DialogTitle>
+          <DialogTitle>Invite User</DialogTitle>
+          <DialogDescription>
+            Send an invitation email to add a new user to your organization.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={onSubmit} className="space-y-4">
             <FormField
               control={form.control}
-              name="userProfile.firstName"
+              name="firstName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -57,7 +58,7 @@ const CreateUserDialog = ({ isOpen, onOpenChange, roles }: ICreateUserDialogProp
 
             <FormField
               control={form.control}
-              name="userProfile.lastName"
+              name="lastName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
@@ -85,25 +86,20 @@ const CreateUserDialog = ({ isOpen, onOpenChange, roles }: ICreateUserDialogProp
 
             <FormField
               control={form.control}
-              name="userProfile.roleId"
+              name="role"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a role" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {roles.map((role) => (
-                        <SelectItem key={role.id} value={role.id.toString()}>
-                          {role.name}
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="member">Member</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="owner">Owner</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -111,37 +107,9 @@ const CreateUserDialog = ({ isOpen, onOpenChange, roles }: ICreateUserDialogProp
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput placeholder="Password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput placeholder="Confirm Password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting && <LoadingSpinner />}
-              Create User
+              Send Invitation
             </Button>
           </form>
         </Form>
@@ -150,4 +118,4 @@ const CreateUserDialog = ({ isOpen, onOpenChange, roles }: ICreateUserDialogProp
   );
 };
 
-export default CreateUserDialog;
+export default InviteUserDialog;

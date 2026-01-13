@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@/shared/components/shadui/dialog";
 import { Form } from "@/shared/components/shadui/form";
+import { EUserState } from "@/shared/typedefs/api";
 
 import { IToggleUserStateDialogProps } from "./ToggleUserStateDialog.types";
 import { useToggleUserStateForm } from "./ToggleUserStateForm.hooks";
@@ -32,14 +33,16 @@ const ToggleUserStateDialog = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{user.state === "ACTIVE" ? "Deactivate" : "Activate"} User</DialogTitle>
+          <DialogTitle>
+            {user.state === EUserState.ACTIVE ? "Deactivate" : "Activate"} User
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <p>
-              Are you sure you want to {user.state === "ACTIVE" ? "deactivate" : "activate"} user{" "}
-              {user.email}?
+              Are you sure you want to{" "}
+              {user.state === EUserState.ACTIVE ? "deactivate" : "activate"} user {user.email}?
             </p>
 
             <DialogFooter>

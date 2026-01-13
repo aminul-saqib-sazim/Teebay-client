@@ -1,8 +1,9 @@
+import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { useForgotPasswordMutation } from "@/shared/redux/rtk-apis/auth/auth.api";
-import { parseApiErrorMessage } from "@/shared/utils/errors";
+import { requestPasswordReset } from "@/shared/lib/auth-client";
 
 import {
   forgotPasswordFormInitialValues,
@@ -10,28 +11,33 @@ import {
 } from "./ForgotPasswordForm.helpers";
 
 export const useForgotPasswordForm = () => {
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const form = useForm<typeof forgotPasswordFormInitialValues>({
     defaultValues: forgotPasswordFormInitialValues,
     resolver: forgotPasswordFormValidationSchemaResolver,
     mode: "onBlur",
   });
 
-  const [forgotPasswordMutation, result] = useForgotPasswordMutation();
-
   const onSubmit = async (values: typeof forgotPasswordFormInitialValues) => {
-    try {
-      await forgotPasswordMutation(values).unwrap();
-      result.reset();
-    } catch (error) {
+    const result = await requestPasswordReset({
+      email: values.email,
+      redirectTo: "/reset-password",
+    });
+
+    if (result.error) {
       toast.error("An error occurred", {
-        description: parseApiErrorMessage(error),
+        description: result.error.message || "Could not send reset link",
       });
+      return;
     }
+
+    setIsSuccess(true);
   };
 
   return {
     form,
     onSubmit,
-    result,
+    isSuccess,
   };
 };

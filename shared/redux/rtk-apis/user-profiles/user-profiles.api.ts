@@ -1,23 +1,23 @@
 import { TApiResponse } from "@/shared/typedefs";
-import { IUserProfileResponse, IUpdateUserProfileDto } from "@/shared/typedefs/api";
 
 import projectApi from "../api.config";
+import { ICurrentUserProfileResponse, IUpdateProfileDto } from "./user-profiles.interfaces";
 
-const usersApi = projectApi.injectEndpoints({
+const userProfileApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
-    getUserProfile: builder.query<IUserProfileResponse, void>({
-      query: () => "user-profiles/me",
-      transformResponse: (response: TApiResponse<IUserProfileResponse>) => response.data,
+    getUserProfile: builder.query<ICurrentUserProfileResponse, void>({
+      query: () => "users/me",
+      transformResponse: (response: TApiResponse<ICurrentUserProfileResponse>) => response.data,
       providesTags: ["UserProfile"],
     }),
 
-    updateUserProfile: builder.mutation<IUserProfileResponse, IUpdateUserProfileDto>({
+    updateUserProfile: builder.mutation<ICurrentUserProfileResponse, IUpdateProfileDto>({
       query: (body) => ({
-        url: "user-profiles/me",
+        url: "users/me",
         method: "PATCH",
         body,
       }),
-      transformResponse: (response: TApiResponse<IUserProfileResponse>) => response.data,
+      transformResponse: (response: TApiResponse<ICurrentUserProfileResponse>) => response.data,
       invalidatesTags: ["UserProfile"],
     }),
   }),
@@ -25,4 +25,4 @@ const usersApi = projectApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetUserProfileQuery, useUpdateUserProfileMutation } = usersApi;
+export const { useGetUserProfileQuery, useUpdateUserProfileMutation } = userProfileApi;

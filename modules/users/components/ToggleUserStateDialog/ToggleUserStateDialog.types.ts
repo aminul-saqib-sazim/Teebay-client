@@ -1,7 +1,7 @@
-import { ISuperuserUserResponse } from "@/shared/typedefs/api";
+import { IUserResponse } from "@/shared/redux/rtk-apis/users/users.interfaces";
 
 export interface IToggleUserStateDialogProps {
-  user?: ISuperuserUserResponse | null;
+  user?: IUserResponse | null;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onCancel: () => void;

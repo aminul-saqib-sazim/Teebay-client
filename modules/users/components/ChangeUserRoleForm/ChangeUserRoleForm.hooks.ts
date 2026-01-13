@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { useUpdateUserMutation } from "@/shared/redux/rtk-apis/users/users.api";
+import { useUpdateMemberRoleMutation } from "@/shared/redux/rtk-apis/members/members.api";
 import { parseApiErrorMessage } from "@/shared/utils/errors";
 
 import {
   changeUserRoleDefaultValues,
   changeUserRoleValidationSchemaResolver,
+  TChangeUserRoleFormFields,
 } from "./ChangeUserRoleForm.helpers";
 
 export const useChangeUserRoleForm = ({
@@ -14,24 +15,25 @@ export const useChangeUserRoleForm = ({
   onSuccess,
   onError,
 }: {
-  userId?: number;
+  userId?: string;
   onSuccess?: () => void;
   onError?: () => void;
 }) => {
-  const form = useForm<typeof changeUserRoleDefaultValues>({
+  const form = useForm<TChangeUserRoleFormFields>({
     defaultValues: changeUserRoleDefaultValues,
     mode: "onSubmit",
     resolver: changeUserRoleValidationSchemaResolver,
   });
 
-  const [updateUser, { reset }] = useUpdateUserMutation();
-  const onSubmit = async (data: typeof changeUserRoleDefaultValues) => {
+  const [updateMemberRole, { reset }] = useUpdateMemberRoleMutation();
+
+  const onSubmit = async (data: TChangeUserRoleFormFields) => {
     if (!userId) return;
 
     try {
-      await updateUser({
-        id: userId,
-        roleId: parseInt(data.roleId),
+      await updateMemberRole({
+        userId,
+        role: data.role,
       }).unwrap();
 
       form.reset();

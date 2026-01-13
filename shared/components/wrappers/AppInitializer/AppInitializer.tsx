@@ -1,34 +1,13 @@
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 
-import { useGetMe } from "@/shared/hooks/useGetMe";
 import { useLanguageDirection } from "@/shared/hooks/useLanguageDirection";
-import { useSubscribeToLocalStorageEvents } from "@/shared/hooks/useSubscribeToLocalStorageEvents";
-
-import { AppInitializerContext } from "./AppInitializerContext";
+import { useSubscribeToLanguageStorageEvents } from "@/shared/hooks/useSubscribeToLanguageStorageEvents";
 
 const AppInitializer = ({ children }: PropsWithChildren) => {
   useLanguageDirection();
+  useSubscribeToLanguageStorageEvents();
 
-  const { isLoading, error, user, getMe, getMeOnLoad } = useGetMe();
-
-  useSubscribeToLocalStorageEvents();
-
-  useEffect(() => {
-    getMeOnLoad();
-  }, [getMeOnLoad]);
-
-  return (
-    <AppInitializerContext.Provider
-      value={{
-        isLoading,
-        error,
-        user,
-        getMe,
-      }}
-    >
-      {children}
-    </AppInitializerContext.Provider>
-  );
+  return <>{children}</>;
 };
 
 export default AppInitializer;

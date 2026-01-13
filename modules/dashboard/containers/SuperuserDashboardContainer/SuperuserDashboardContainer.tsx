@@ -1,9 +1,7 @@
-const SuperuserDashboardContainer = () => {
-  return (
-    <div>
-      <h1>Superuser Dashboard Container</h1>
-    </div>
-  );
-};
+const SuperuserDashboardContainer = () => (
+  <div>
+    <h1>Superuser Dashboard Container</h1>
+  </div>
+);
 
 export default SuperuserDashboardContainer;

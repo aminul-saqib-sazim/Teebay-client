@@ -1,29 +1,34 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { useCreateUserMutation } from "@/shared/redux/rtk-apis/users/users.api";
+import { useInviteUserMutation } from "@/shared/redux/rtk-apis/users/users.api";
+import { IInviteUserDto } from "@/shared/redux/rtk-apis/users/users.interfaces";
 import { parseApiErrorMessage } from "@/shared/utils/errors";
 
-import { createUserFormInitialValues, createUserFormResolver } from "./CreateUserDialog.helpers";
-import { TCreateUserFormFields } from "./CreateUserDialog.types";
+import { inviteUserFormInitialValues, inviteUserFormResolver } from "./CreateUserDialog.helpers";
 
-export const useCreateUserForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void }) => {
-  const form = useForm<TCreateUserFormFields>({
-    defaultValues: createUserFormInitialValues,
-    resolver: createUserFormResolver,
+export const useInviteUserForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void }) => {
+  const form = useForm<IInviteUserDto>({
+    defaultValues: inviteUserFormInitialValues,
+    resolver: inviteUserFormResolver,
   });
 
-  const [createUser] = useCreateUserMutation();
+  const [inviteUser] = useInviteUserMutation();
 
-  const onSubmit = async (values: TCreateUserFormFields) => {
+  const onSubmit = async (values: IInviteUserDto) => {
     try {
-      const { confirmPassword: _, ...userData } = values;
-      await createUser(userData).unwrap();
-      toast.success("User created successfully");
-      form.reset();
-      onOpenChange(false);
+      const result = await inviteUser(values).unwrap();
+      if (result.success) {
+        toast.success("Invitation sent successfully");
+        form.reset();
+        onOpenChange(false);
+      } else {
+        toast.error("Failed to invite user", {
+          description: result.message,
+        });
+      }
     } catch (error) {
-      toast.error("Failed to create user", {
+      toast.error("Failed to invite user", {
         description: parseApiErrorMessage(error),
       });
     }

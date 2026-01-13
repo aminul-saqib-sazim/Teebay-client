@@ -16,13 +16,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/components/shadui/sidebar";
-import { useSessionContext } from "@/shared/components/wrappers/AppInitializer/AppInitializerContext";
 import { useSignOut } from "@/shared/hooks/useSignOut";
+import { useAuth } from "@/shared/providers/AuthProvider";
 
 import { getSidebarMenuItem } from "./AppSidebar.constants";
 
 const AppSidebar = () => {
-  const { isLoading, user } = useSessionContext();
+  const { isLoading, user, activeOrganizationRole } = useAuth();
   const { signOut } = useSignOut();
 
   if (isLoading || !user) {
@@ -36,7 +36,7 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {getSidebarMenuItem(user.claim).map((item) => (
+              {getSidebarMenuItem(activeOrganizationRole).map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>

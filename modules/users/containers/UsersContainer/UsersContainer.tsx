@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/shadui/dropdown-menu";
 import { ScrollArea, ScrollBar } from "@/shared/components/shadui/scroll-area";
@@ -22,12 +23,13 @@ import {
 } from "@/shared/components/shadui/select";
 import TableCheckBox from "@/shared/components/Table/TableCheckbox";
 import TablePagination from "@/shared/components/Table/TablePagination";
-import { useGetAllRolesQuery } from "@/shared/redux/rtk-apis/roles/roles.api";
+import { useGetRolesQuery } from "@/shared/redux/rtk-apis/roles/roles.api";
 import { useGetUsersQuery } from "@/shared/redux/rtk-apis/users/users.api";
-import { EUserState, ISuperuserUserResponse } from "@/shared/typedefs/api";
+import { IUserResponse } from "@/shared/redux/rtk-apis/users/users.interfaces";
+import { EUserState } from "@/shared/typedefs/api";
 
 import ChangeUserRoleDialog from "../../components/ChangeUserRoleDialog";
-import CreateUserDialog from "../../components/CreateUserDialog";
+import { InviteUserDialog } from "../../components/CreateUserDialog";
 import ToggleUserStateDialog from "../../components/ToggleUserStateDialog";
 import UsersTable from "../../components/UsersTable";
 import { PAGINATION_LIMIT_OPTIONS } from "./UsersContainer.constants";
@@ -43,12 +45,26 @@ const UsersContainer = () => {
     page,
     state: userState ?? undefined,
   });
-  const { data: roles, isLoading: isRolesLoading } = useGetAllRolesQuery();
+  const { data: roles = [] } = useGetRolesQuery();
 
-  const [selectedUser, setSelectedUser] = useState<ISuperuserUserResponse | null>(null);
-  const [isChangeRoleDialogOpen, setIsChangeRoleDialogOpen] = useState(false);
+  const [isInviteUserDialogOpen, setIsInviteUserDialogOpen] = useState(false);
   const [isToggleStateDialogOpen, setIsToggleStateDialogOpen] = useState(false);
-  const [isCreateUserDialogOpen, setIsCreateUserDialogOpen] = useState(false);
+  const [isChangeRoleDialogOpen, setIsChangeRoleDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<IUserResponse | null>(null);
+
+  const handleToggleStateClick = (user: IUserResponse) => {
+    setSelectedUser(user);
+    setIsToggleStateDialogOpen(true);
+  };
+
+  const handleChangeRoleClick = (user: IUserResponse) => {
+    setSelectedUser(user);
+    setIsChangeRoleDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setSelectedUser(null);
+  };
 
   const handleLimitChange = (value: string) => {
     setQueryStates({ limit: parseInt(value), page: 1 });
@@ -58,7 +74,7 @@ const UsersContainer = () => {
     setQueryStates({ userState: value as EUserState, page: 1 });
   };
 
-  const usersTableColumns: ColumnDef<ISuperuserUserResponse>[] = [
+  const usersTableColumns: ColumnDef<IUserResponse>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -91,17 +107,12 @@ const UsersContainer = () => {
     {
       accessorKey: "firstName",
       header: "First Name",
-      cell: ({ row }) => row.original.userProfile.firstName,
+      cell: ({ row }) => row.original.firstName,
     },
     {
       accessorKey: "lastName",
       header: "Last Name",
-      cell: ({ row }) => row.original.userProfile.lastName,
-    },
-    {
-      accessorKey: "role",
-      header: "Role",
-      cell: ({ row }) => row.original.userProfile.role.name,
+      cell: ({ row }) => row.original.lastName,
     },
     {
       accessorKey: "state",
@@ -119,20 +130,11 @@ const UsersContainer = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => {
-                setSelectedUser(row.original);
-                setIsChangeRoleDialogOpen(true);
-              }}
-            >
-              Change User Role
+            <DropdownMenuItem onClick={() => handleChangeRoleClick(row.original)}>
+              Change Role
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                setSelectedUser(row.original);
-                setIsToggleStateDialogOpen(true);
-              }}
-            >
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => handleToggleStateClick(row.original)}>
               {row.original.state === EUserState.ACTIVE ? "Deactivate" : "Activate"}
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -141,49 +143,45 @@ const UsersContainer = () => {
     },
   ];
 
-  if (isUsersLoading || isRolesLoading) {
+  if (isUsersLoading) {
     return <FullPageLoadingSpinner />;
   }
 
-  if (!users || !roles) {
+  if (!users) {
     return null;
   }
 
   return (
     <div className="container py-4">
-      <CreateUserDialog
-        isOpen={isCreateUserDialogOpen}
-        onOpenChange={setIsCreateUserDialogOpen}
-        roles={roles}
+      <InviteUserDialog isOpen={isInviteUserDialogOpen} onOpenChange={setIsInviteUserDialogOpen} />
+      <ToggleUserStateDialog
+        user={selectedUser}
+        isOpen={isToggleStateDialogOpen}
+        onOpenChange={setIsToggleStateDialogOpen}
+        onCancel={handleDialogClose}
       />
       <ChangeUserRoleDialog
         user={selectedUser}
         isOpen={isChangeRoleDialogOpen}
         onOpenChange={setIsChangeRoleDialogOpen}
         roles={roles}
-        onCancel={() => setSelectedUser(null)}
-      />
-      <ToggleUserStateDialog
-        user={selectedUser}
-        isOpen={isToggleStateDialogOpen}
-        onOpenChange={setIsToggleStateDialogOpen}
-        onCancel={() => setSelectedUser(null)}
+        onCancel={handleDialogClose}
       />
 
       <div className="flex flex-row items-center justify-between">
         <h3 className="text text-primary text-4xl font-bold">Users</h3>
         <div className="flex flex-row justify-end gap-4 w-full">
-          <Button onClick={() => setIsCreateUserDialogOpen(true)}>Add User</Button>
+          <Button onClick={() => setIsInviteUserDialogOpen(true)}>Invite User</Button>
           <Select value={userState?.toString()} onValueChange={handleUserStateChange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem key={EUserState.ACTIVE} value={EUserState.ACTIVE.toString()}>
-                {EUserState.ACTIVE}
+              <SelectItem key={EUserState.ACTIVE} value={EUserState.ACTIVE}>
+                Active
               </SelectItem>
-              <SelectItem key={EUserState.INACTIVE} value={EUserState.INACTIVE.toString()}>
-                {EUserState.INACTIVE}
+              <SelectItem key={EUserState.INACTIVE} value={EUserState.INACTIVE}>
+                Inactive
               </SelectItem>
             </SelectContent>
           </Select>

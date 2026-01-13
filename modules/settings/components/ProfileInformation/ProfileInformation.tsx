@@ -1,18 +1,18 @@
 import { UseFormReturn } from "react-hook-form";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/shadui/card";
-import { Input } from "@/shared/components/shadui/input";
-import { Label } from "@/shared/components/shadui/label";
-import { IUserProfileResponse, IUpdateUserProfileDto } from "@/shared/typedefs/api";
+import {
+  ICurrentUserProfileResponse,
+  IUpdateProfileDto,
+} from "@/shared/redux/rtk-apis/user-profiles/user-profiles.interfaces";
 
 import UpdateProfileInformationFormFields from "../UpdateProfileInformationForm";
 
 const ProfileInformation = ({
-  userProfile,
   form,
 }: {
-  userProfile: IUserProfileResponse;
-  form: UseFormReturn<IUpdateUserProfileDto>;
+  userProfile: ICurrentUserProfileResponse;
+  form: UseFormReturn<IUpdateProfileDto>;
 }) => (
   <Card>
     <CardHeader>
@@ -20,10 +20,6 @@ const ProfileInformation = ({
     </CardHeader>
     <CardContent className="space-y-4">
       <UpdateProfileInformationFormFields form={form} />
-      <div>
-        <Label htmlFor="role">Role</Label>
-        <Input id="role" name="role" value={userProfile.role.name} disabled className="bg-muted" />
-      </div>
     </CardContent>
   </Card>
 );

@@ -1,6 +1,19 @@
 import { Calendar, Home, Inbox, Search, Settings, Users } from "lucide-react";
 
-import { EUserRole } from "@/shared/typedefs/api";
+import { EUserRole } from "@/shared/redux/rtk-apis/roles/roles.enums";
+
+const DEFAULT_SIDEBAR_MENU_ITEMS = [
+  {
+    title: "Home",
+    url: "/dashboard",
+    icon: Home,
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
+  },
+];
 
 const ADMIN_SIDEBAR_MENU_ITEMS = [
   {
@@ -30,7 +43,7 @@ const ADMIN_SIDEBAR_MENU_ITEMS = [
   },
 ];
 
-const SUPER_USER_SIDEBAR_MENU_ITEMS = [
+const OWNER_SIDEBAR_MENU_ITEMS = [
   {
     title: "Home",
     url: "/dashboard",
@@ -48,14 +61,15 @@ const SUPER_USER_SIDEBAR_MENU_ITEMS = [
   },
 ];
 
-export const getSidebarMenuItem = (signedInUserRole: EUserRole) => {
-  switch (signedInUserRole) {
+export const getSidebarMenuItem = (role: EUserRole | null) => {
+  switch (role) {
+    case EUserRole.OWNER:
+      return OWNER_SIDEBAR_MENU_ITEMS;
     case EUserRole.ADMIN:
       return ADMIN_SIDEBAR_MENU_ITEMS;
-    case EUserRole.SUPER_USER:
-      return SUPER_USER_SIDEBAR_MENU_ITEMS;
-
+    case EUserRole.MEMBER:
+      return DEFAULT_SIDEBAR_MENU_ITEMS;
     default:
-      return [];
+      return DEFAULT_SIDEBAR_MENU_ITEMS;
   }
 };

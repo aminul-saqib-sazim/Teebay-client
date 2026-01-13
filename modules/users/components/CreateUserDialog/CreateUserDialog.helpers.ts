@@ -1,33 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { TCreateUserFormFields } from "./CreateUserDialog.types";
+import { EUserRole } from "@/shared/redux/rtk-apis/roles/roles.enums";
+import { IInviteUserDto } from "@/shared/redux/rtk-apis/users/users.interfaces";
 
-export const createUserFormInitialValues: TCreateUserFormFields = {
+export const inviteUserFormInitialValues: IInviteUserDto = {
   email: "",
-  password: "",
-  userProfile: {
-    firstName: "",
-    lastName: "",
-    roleId: 0,
-  },
-  confirmPassword: "",
+  firstName: "",
+  lastName: "",
+  role: EUserRole.MEMBER,
 };
 
-export const createUserFormValidationSchema: z.ZodType<TCreateUserFormFields> = z
-  .object({
-    email: z.string().email("Invalid email").min(1, "Required"),
-    password: z.string().min(8, "Must be at least 8 characters long"),
-    confirmPassword: z.string().min(1, "Required"),
-    userProfile: z.object({
-      firstName: z.string().min(1, "Required"),
-      lastName: z.string().min(1, "Required"),
-      roleId: z.number().min(1, "Required"),
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+export const inviteUserFormValidationSchema: z.ZodType<IInviteUserDto> = z.object({
+  email: z.string().email("Invalid email").min(1, "Required"),
+  firstName: z.string().min(1, "Required"),
+  lastName: z.string().min(1, "Required"),
+  role: z.nativeEnum(EUserRole),
+});
 
-export const createUserFormResolver = zodResolver(createUserFormValidationSchema);
+export const inviteUserFormResolver = zodResolver(inviteUserFormValidationSchema);

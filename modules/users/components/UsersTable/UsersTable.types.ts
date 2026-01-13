@@ -1,6 +1,6 @@
+import { IUserResponse } from "@/shared/redux/rtk-apis/users/users.interfaces";
 import { TDataTableProps } from "@/shared/typedefs";
-import { ISuperuserUserResponse } from "@/shared/typedefs/api";
 
-export type TUsersTableProps = TDataTableProps<ISuperuserUserResponse, unknown> & {
+export type TUsersTableProps = TDataTableProps<IUserResponse, unknown> & {
   test?: string;
 };

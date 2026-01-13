@@ -1,7 +1,7 @@
 import type { NextRouter } from "next/router";
 
 import { SIGN_IN_ROUTE } from "../../constants/routes.constants";
-import { clearUser } from "../../redux/reducers/user.reducer";
+import { signOut as betterAuthSignOut } from "../../lib/auth-client";
 import projectApi from "../../redux/rtk-apis/api.config";
 import { TAppDispatch } from "../../redux/store";
 import { SIGN_OUT_EVENT_NAME } from "./signOut.constants";
@@ -12,7 +12,7 @@ const emitSignOutEvent = (signOutReason: ESignOutReason) => {
   localStorage.removeItem(SIGN_OUT_EVENT_NAME);
 };
 
-export const signOut = ({
+export const signOut = async ({
   dispatch,
   router,
   reason,
@@ -27,9 +27,10 @@ export const signOut = ({
   shouldEmitSignOutEvent?: boolean;
   shouldRedirect?: boolean;
 }) => {
+  await betterAuthSignOut();
+
   localStorage.clear();
 
-  dispatch(clearUser());
   dispatch(projectApi.util.resetApiState());
 
   if (shouldEmitSignOutEvent) {

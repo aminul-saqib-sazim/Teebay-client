@@ -1,73 +1,111 @@
 import { useEffect, useState } from "react";
 
-import { parseAsString, useQueryStates } from "nuqs";
+import { useRouter } from "next/router";
+
+import { parseAsString, useQueryState } from "nuqs";
 
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/shadui/card";
+import PublicRoute from "@/shared/components/wrappers/PublicRoute";
+import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "@/shared/constants/app.constants";
+import { DASHBOARD_ROUTE } from "@/shared/constants/routes.constants";
 import GeneralLayout from "@/shared/layouts/GeneralLayout";
-import {
-  useFindOneVerificationRequestQuery,
-  useVerifyTokenMutation,
-} from "@/shared/redux/rtk-apis/verification-requests/verification-requests.api";
+import { organization, verifyEmail } from "@/shared/lib/auth-client";
 import { NextApplicationPage } from "@/shared/typedefs";
 
-const VerifyTokenPage: NextApplicationPage = () => {
-  const [{ token, type }] = useQueryStates({
-    token: parseAsString.withDefault(""),
-    type: parseAsString.withDefault(""),
-  });
+const VerifyEmailPage: NextApplicationPage = () => {
+  const router = useRouter();
+  const [token] = useQueryState("token", parseAsString.withDefault(""));
 
-  const { error, isLoading, isUninitialized, isFetching } = useFindOneVerificationRequestQuery(
-    { token: token, type: type },
-    { skip: !token || !type },
-  );
-
-  const isTokenFound = !isUninitialized && !isLoading && !isFetching && !error;
-
-  const [isVerifyingToken, setIsVerifyingToken] = useState(false);
-  const [isTokenVerified, setIsTokenVerified] = useState(false);
-  const [isTokenVerificationError, setIsTokenVerificationError] = useState(false);
-  const [verifyToken] = useVerifyTokenMutation();
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isTokenFound) return;
+    if (!router.isReady || !token || isVerifying || isVerified || error) return;
 
-    setIsVerifyingToken(true);
-    verifyToken({ token: token as string, type: type as string })
-      .unwrap()
-      .then(() => setIsTokenVerified(true))
-      .catch(() => setIsTokenVerificationError(true))
-      .finally(() => setIsVerifyingToken(false));
-  }, [isTokenFound, verifyToken, token, type]);
+    const verify = async () => {
+      setIsVerifying(true);
+      try {
+        const result = await verifyEmail(
+          { query: { token } },
+          {
+            onSuccess: (ctx) => {
+              const authToken = ctx.response.headers.get("set-auth-token");
+              if (authToken) {
+                localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, authToken);
+              }
+            },
+          },
+        );
 
-  if (isUninitialized || isLoading || isFetching || isVerifyingToken) {
+        if (result.error) {
+          setError(result.error.message || "Verification failed");
+        } else {
+          const orgsResult = await organization.list();
+          const firstOrg = orgsResult.data?.[0];
+          if (firstOrg) {
+            await organization.setActive({ organizationId: firstOrg.id });
+          }
+
+          setIsVerified(true);
+          setTimeout(() => {
+            router.push(DASHBOARD_ROUTE);
+          }, 2000);
+        }
+      } catch {
+        setError("An unexpected error occurred");
+      } finally {
+        setIsVerifying(false);
+      }
+    };
+
+    verify();
+  }, [router.isReady, token, isVerifying, isVerified, error, router]);
+
+  if (!router.isReady || isVerifying) {
     return <FullPageLoadingSpinner />;
   }
 
-  if (error || isTokenVerificationError) {
+  if (!token) {
     return (
       <div className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-lg">
           <CardHeader>
-            <CardTitle>Verification</CardTitle>
+            <CardTitle>Invalid Link</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Verification failed. Invalid Verification request.</p>
+            <p>No verification token provided. Please check the link in your email.</p>
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  if (isTokenVerified) {
+  if (error) {
     return (
       <div className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-lg">
           <CardHeader>
-            <CardTitle>Verification</CardTitle>
+            <CardTitle>Verification Failed</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Verification successful</p>
+            <p>{error}</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isVerified) {
+    return (
+      <div className="flex-1 flex items-center justify-center p-4">
+        <Card className="w-full max-w-lg">
+          <CardHeader>
+            <CardTitle>Email Verified</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Your email has been verified successfully. Redirecting to dashboard...</p>
           </CardContent>
         </Card>
       </div>
@@ -77,6 +115,7 @@ const VerifyTokenPage: NextApplicationPage = () => {
   return null;
 };
 
-VerifyTokenPage.Layout = GeneralLayout;
+VerifyEmailPage.Layout = GeneralLayout;
+VerifyEmailPage.Guard = PublicRoute;
 
-export default VerifyTokenPage;
+export default VerifyEmailPage;

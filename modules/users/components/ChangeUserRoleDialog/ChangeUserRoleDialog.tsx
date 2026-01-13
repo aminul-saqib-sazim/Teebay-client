@@ -41,7 +41,7 @@ const ChangeUserRoleDialog = ({
             <ChangeUserRoleFormFields form={form} roles={roles} />
 
             <DialogFooter className="mt-4">
-              <Button variant="outline" onClick={handleOnCancel}>
+              <Button variant="outline" onClick={handleOnCancel} type="button">
                 Cancel
               </Button>
               <Button type="submit">Save</Button>

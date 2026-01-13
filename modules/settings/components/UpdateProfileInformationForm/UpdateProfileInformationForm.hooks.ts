@@ -4,7 +4,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { useUpdateUserProfileMutation } from "@/shared/redux/rtk-apis/user-profiles/user-profiles.api";
-import { IUserProfileResponse, IUpdateUserProfileDto } from "@/shared/typedefs/api";
+import {
+  ICurrentUserProfileResponse,
+  IUpdateProfileDto,
+} from "@/shared/redux/rtk-apis/user-profiles/user-profiles.interfaces";
 import { parseApiErrorMessage } from "@/shared/utils/errors";
 
 import {
@@ -12,8 +15,8 @@ import {
   updateProfileInformationValidationSchemaResolver,
 } from "./UpdateProfileInformationForm.helpers";
 
-export const useUpdateUserProfileInformationForm = (userProfile?: IUserProfileResponse) => {
-  const form = useForm<IUpdateUserProfileDto>({
+export const useUpdateUserProfileInformationForm = (userProfile?: ICurrentUserProfileResponse) => {
+  const form = useForm<IUpdateProfileDto>({
     defaultValues: getUpdateProfileInformationInitialValues(userProfile),
     mode: "onBlur",
     resolver: updateProfileInformationValidationSchemaResolver,
@@ -25,7 +28,7 @@ export const useUpdateUserProfileInformationForm = (userProfile?: IUserProfileRe
 
   const [updateUserProfileMutation, { reset }] = useUpdateUserProfileMutation();
 
-  const onSubmit = async (updatedValues: IUpdateUserProfileDto) => {
+  const onSubmit = async (updatedValues: IUpdateProfileDto) => {
     try {
       await updateUserProfileMutation(updatedValues);
 

@@ -1,9 +1,10 @@
-import { IRoleResponse, ISuperuserUserResponse } from "@/shared/typedefs/api";
+import { EUserRole } from "@/shared/redux/rtk-apis/roles/roles.enums";
+import { IUserResponse } from "@/shared/redux/rtk-apis/users/users.interfaces";
 
 export type TChangeUserRoleDialogProps = {
-  user: ISuperuserUserResponse | null;
+  user: IUserResponse | null;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  roles: IRoleResponse[];
+  roles: EUserRole[];
   onCancel?: () => void;
 };

@@ -1,5 +1,4 @@
-import { IResetPasswordDto } from "@/shared/typedefs/api";
-
-export type TResetPasswordFormFields = IResetPasswordDto & {
+export type TResetPasswordFormFields = {
+  password: string;
   confirmPassword: string;
 };

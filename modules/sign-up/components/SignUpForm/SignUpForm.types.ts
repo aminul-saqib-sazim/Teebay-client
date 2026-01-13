@@ -1,5 +1,11 @@
-import { ISelfRegisterUserDto } from "@/shared/typedefs/api";
-
-export type TSignUpFormFields = ISelfRegisterUserDto & {
+export type TSignUpFormFields = {
+  email: string;
+  password: string;
   confirmPassword: string;
+  firstName: string;
+  lastName: string;
+};
+
+export type TUseSignUpFormOptions = {
+  onEmailSent?: (email: string) => void;
 };

@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/shadui/select";
-import { IRoleResponse } from "@/shared/typedefs/api";
+import { EUserRole } from "@/shared/redux/rtk-apis/roles/roles.enums";
 
 import { useChangeUserRoleForm } from "./ChangeUserRoleForm.hooks";
 
@@ -21,13 +21,12 @@ const ChangeUserRoleFormFields = ({
   form,
 }: {
   form: ReturnType<typeof useChangeUserRoleForm>["form"];
-  userId?: number;
-  roles: IRoleResponse[];
+  roles: EUserRole[];
 }) => (
   <>
     <FormField
       control={form.control}
-      name="roleId"
+      name="role"
       render={({ field }) => (
         <FormItem>
           <FormLabel>Role</FormLabel>
@@ -39,8 +38,8 @@ const ChangeUserRoleFormFields = ({
             </FormControl>
             <SelectContent>
               {roles.map((role) => (
-                <SelectItem key={role.id} value={role.id.toString()}>
-                  {role.name}
+                <SelectItem key={role} value={role}>
+                  {role.toUpperCase()}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { useResetPasswordMutation } from "@/shared/redux/rtk-apis/auth/auth.api";
-import { parseApiErrorMessage } from "@/shared/utils/errors";
+import { SIGN_IN_ROUTE } from "@/shared/constants/routes.constants";
+import { resetPassword } from "@/shared/lib/auth-client";
 
 import {
   resetPasswordFormInitialValues,
@@ -19,31 +19,30 @@ export const useResetPasswordForm = (token: string) => {
     resolver: resetPasswordFormValidationResolver,
     mode: "onBlur",
   });
-  const [resetPasswordMutation, { reset }] = useResetPasswordMutation();
 
   const onSubmit = async (values: TResetPasswordFormFields) => {
     if (!token) {
       return;
     }
 
-    try {
-      await resetPasswordMutation({
-        token,
-        password: values.password,
-      }).unwrap();
+    const result = await resetPassword({
+      token,
+      newPassword: values.password,
+    });
 
-      toast.success("Password reset successfully");
-      form.reset();
-      reset();
-
-      setTimeout(() => {
-        router.replace("/sign-in");
-      }, 2000);
-    } catch (error) {
+    if (result.error) {
       toast.error("Failed to reset password", {
-        description: parseApiErrorMessage(error),
+        description: result.error.message || "Could not reset password",
       });
+      return;
     }
+
+    toast.success("Password reset successfully");
+    form.reset();
+
+    setTimeout(() => {
+      router.replace(SIGN_IN_ROUTE);
+    }, 2000);
   };
 
   return {

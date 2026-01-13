@@ -10,7 +10,7 @@ export const useToggleUserStateForm = ({
   currentState,
   onSuccess,
 }: {
-  userId?: number;
+  userId?: string;
   currentState?: EUserState;
   onSuccess?: () => void;
 }) => {
