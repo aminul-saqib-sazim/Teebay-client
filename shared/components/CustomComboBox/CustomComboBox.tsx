@@ -76,7 +76,7 @@ const CustomComboBox: React.FC<TComboBoxProps> = ({
       <PopoverContent
         className={cn(
           "p-0 rounded-md border border-border bg-background-secondary",
-          popoverSameAsTriggerWidth ? "w-[--radix-popover-trigger-width]" : null,
+          popoverSameAsTriggerWidth ? "w-(--radix-popover-trigger-width)" : null,
           dropdownClassname,
         )}
         align={dropdownPosition}

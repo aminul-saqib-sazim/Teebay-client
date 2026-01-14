@@ -10,7 +10,7 @@ export type TComboBoxProps = {
   triggerLeftIcon?: React.ReactNode;
   triggerRightIcon?: React.ReactNode | "none";
   buttonSize?: "sm" | "default" | "lg" | "icon";
-  buttonVariant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  buttonVariant?: "default" | "destructive" | "secondary" | "ghost" | "link" | "outline";
   buttonClassname?: string;
   dropdownClassname?: string;
   dropdownPosition?: "start" | "center" | "end";
