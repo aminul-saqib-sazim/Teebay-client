@@ -1,27 +1,30 @@
 import type { NextRouter } from "next/router";
 
-import { mockDeep } from "jest-mock-extended";
+import { vi } from "vitest";
+import { mockDeep } from "vitest-mock-extended";
 
 import { SIGN_IN_ROUTE } from "../../constants/routes.constants";
 import projectApi from "../../redux/rtk-apis/api.config";
 import { ESignOutReason, SIGN_OUT_EVENT_NAME, signOut } from "../signOut";
 
-jest.mock("../../lib/auth-client", () => ({
-  signOut: jest.fn().mockResolvedValue(undefined),
+vi.mock("../../lib/auth-client", () => ({
+  signOut: vi.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock("../../redux/rtk-apis/api.config", () => ({
-  util: {
-    resetApiState: jest.fn(),
+vi.mock("../../redux/rtk-apis/api.config", () => ({
+  default: {
+    util: {
+      resetApiState: vi.fn(),
+    },
   },
 }));
 
-const mockDispatch = jest.fn();
-const mockRouter = mockDeep<NextRouter>({ funcPropSupport: true });
+const mockDispatch = vi.fn();
+const mockRouter = mockDeep<NextRouter>();
 
 describe("signOut", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     localStorage.clear();
   });
 

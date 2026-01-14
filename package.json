@@ -6,6 +6,7 @@
   "engines": {
     "node": ">=22.21.0"
   },
+  "type": "module",
   "scripts": {
     "start:dev": "next dev",
     "build": "next build",
@@ -15,7 +16,8 @@
     "postinstall": "next telemetry disable",
     "prettier:format": "npx prettier --write ./",
     "prepare": "husky install",
-    "test": "jest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint-staged": "lint-staged",
     "swagger-codegen": "npx tsx ./swagger-codegen.ts"
   },
@@ -79,14 +81,12 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@jest/globals": "^29.7.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/react-hooks": "^8.0.1",
+    "@vitest/coverage-v8": "^2.1.8",
     "@types/node": "^22.19.3",
-    "@types/jest": "^29.5.14",
     "@types/pluralize": "^0.0.33",
     "@types/uuid": "^10.0.0",
     "@commitlint/cli": "^19.7.1",
@@ -104,18 +104,17 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^4.6.2",
     "husky": "^8.0.3",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "jest-mock-extended": "^4.0.0-beta1",
     "lint-staged": "^15.4.3",
     "postcss": "^8.5.2",
     "prettier": "^3.5.1",
     "swagger-typescript-api": "^13.0.23",
     "tailwindcss": "^4.1.18",
-    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
-    "webpack": "^5.90.0"
+    "webpack": "^5.90.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.8.0",
+    "vitest": "^2.1.8",
+    "vitest-mock-extended": "^2.0.2"
   },
   "resolutions": {
     "@types/react": "18.3.1",

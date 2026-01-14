@@ -1,25 +1,21 @@
+import { vi, type Mock } from "vitest";
+
 import { uploadToS3, getS3AccessibleUrlAfterUpload } from "../files";
 
 describe("uploadToS3", () => {
-  // @ts-expect-error mocking fetch
-  let originalFetch;
-
   beforeEach(() => {
-    originalFetch = global.fetch;
-    // @ts-expect-error mocking fetch
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         json: () =>
           Promise.resolve({
             value: "Testing something!",
           }),
       }),
-    );
+    ) as Mock;
   });
 
   afterEach(() => {
-    // @ts-expect-error mocking fetch
-    global.fetch = originalFetch;
+    vi.restoreAllMocks();
   });
 
   it("should upload a file to S3", async () => {

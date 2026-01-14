@@ -1,14 +1,16 @@
+import { vi, type Mock } from "vitest";
+
 import { encodeObjectToBase64 } from "../../utils/base64";
 import { GOOGLE_OAUTH_SIGN_IN_PARAMS } from "../oauth.constants";
 import { getGoogleOAuthSigninParams } from "../oauth.helpers";
 
-jest.mock("../../utils/base64", () => ({
-  encodeObjectToBase64: jest.fn(),
+vi.mock("../../utils/base64", () => ({
+  encodeObjectToBase64: vi.fn(),
 }));
 
 describe("OAuth Helpers", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("getGoogleOAuthSigninParams", () => {
@@ -16,7 +18,7 @@ describe("OAuth Helpers", () => {
       const mockState = { custom: "data" };
       const encodedState = "encodedBase64String";
 
-      (encodeObjectToBase64 as jest.Mock).mockReturnValueOnce(encodedState);
+      (encodeObjectToBase64 as Mock).mockReturnValueOnce(encodedState);
 
       const result = getGoogleOAuthSigninParams(mockState);
 
@@ -34,7 +36,7 @@ describe("OAuth Helpers", () => {
     it("should return correct params with default state when no state is passed", () => {
       const encodedState = "defaultEncodedState";
 
-      (encodeObjectToBase64 as jest.Mock).mockReturnValueOnce(encodedState);
+      (encodeObjectToBase64 as Mock).mockReturnValueOnce(encodedState);
 
       const result = getGoogleOAuthSigninParams();
 
