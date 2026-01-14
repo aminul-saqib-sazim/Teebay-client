@@ -66,14 +66,6 @@ const UsersContainer = () => {
     setSelectedUser(null);
   };
 
-  const handleLimitChange = (value: string) => {
-    setQueryStates({ limit: parseInt(value), page: 1 });
-  };
-
-  const handleUserStateChange = (value: string) => {
-    setQueryStates({ userState: value as EUserState, page: 1 });
-  };
-
   const usersTableColumns: ColumnDef<IUserResponse>[] = [
     {
       id: "select",
@@ -124,7 +116,7 @@ const UsersContainer = () => {
       header: "Actions",
       cell: ({ row }) => (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <MoreVertical className="h-4 w-4" />
             </Button>
@@ -172,7 +164,12 @@ const UsersContainer = () => {
         <h3 className="text text-primary text-4xl font-bold">Users</h3>
         <div className="flex flex-row justify-end gap-4 w-full">
           <Button onClick={() => setIsInviteUserDialogOpen(true)}>Invite User</Button>
-          <Select value={userState?.toString()} onValueChange={handleUserStateChange}>
+          <Select
+            value={userState?.toString() ?? undefined}
+            onValueChange={(value: string | null) => {
+              setQueryStates({ userState: value as EUserState, page: 1 });
+            }}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by" />
             </SelectTrigger>
@@ -186,7 +183,12 @@ const UsersContainer = () => {
             </SelectContent>
           </Select>
 
-          <Select value={limit.toString()} onValueChange={handleLimitChange}>
+          <Select
+            value={limit.toString()}
+            onValueChange={(value: string | null) => {
+              setQueryStates({ limit: parseInt(value ?? "10"), page: 1 });
+            }}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select rows per page" />
             </SelectTrigger>

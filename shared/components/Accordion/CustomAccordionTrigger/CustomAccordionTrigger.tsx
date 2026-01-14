@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 import { MdArrowDropDown } from "react-icons/md";
 
 import { cn } from "@/lib/utils";
@@ -33,15 +33,13 @@ const CustomAccordionTrigger = React.forwardRef<
       >
         {children}
         {!openIcon && !closedIcon ? (
-          <div className="shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180 absolute right-2">
+          <div className="shrink-0 transition-transform duration-200 group-aria-expanded:rotate-180 absolute right-2">
             {rotatableIcon}
           </div>
         ) : (
           <>
-            <div className="shrink-0 group-data-[state=open]:hidden absolute right-2">
-              {openIcon}
-            </div>
-            <div className="shrink-0 group-data-[state=closed]:hidden absolute right-2">
+            <div className="shrink-0 group-aria-expanded:hidden absolute right-2">{openIcon}</div>
+            <div className="shrink-0 group-aria-expanded:flex hidden absolute right-2">
               {closedIcon}
             </div>
           </>

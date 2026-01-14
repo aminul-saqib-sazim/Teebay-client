@@ -1,5 +1,5 @@
-import { TextareaProps } from "../../shadui/textarea";
+import type { ComponentProps } from "react";
 
-export interface ICustomTextAreaProps extends TextareaProps {
+export type ICustomTextAreaProps = ComponentProps<"textarea"> & {
   isError?: boolean;
-}
+};

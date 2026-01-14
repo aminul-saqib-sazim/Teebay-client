@@ -50,8 +50,10 @@ export const LanguageSelector = () => {
     setValue(i18n.language);
   }, [i18n.language, value]);
 
-  const handleLanguageChange = (newValue: string) => {
-    setValue(newValue);
+  const handleLanguageChange = (newValue: string | null) => {
+    if (newValue) {
+      setValue(newValue);
+    }
   };
 
   return (

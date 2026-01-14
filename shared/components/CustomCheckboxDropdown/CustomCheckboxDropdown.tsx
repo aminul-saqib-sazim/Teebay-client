@@ -16,7 +16,7 @@ const CustomCheckboxDropdown: React.FC<TCustomCheckboxDropdownProps> = ({
   dropdownPosition = "center",
 }) => (
   <DropdownMenu>
-    <DropdownMenuTrigger asChild>
+    <DropdownMenuTrigger>
       <Button variant="outline" className="text-background-secondary-foreground">
         {placeholder}
       </Button>

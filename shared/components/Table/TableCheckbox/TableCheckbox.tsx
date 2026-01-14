@@ -1,27 +1,20 @@
 import React from "react";
 
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Check } from "lucide-react";
-
+import { Checkbox } from "@/shared/components/shadui/checkbox";
 import { cn } from "@/lib/utils";
 
-const TableCheckbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <CheckboxPrimitive.Root
-    ref={ref}
+const TableCheckbox = ({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof Checkbox>) => (
+  <Checkbox
     className={cn(
       "flex items-center justify-center h-4 w-4 border ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
       className,
     )}
     {...props}
-  >
-    <CheckboxPrimitive.Indicator>
-      <Check className="h-2 w-2" />
-    </CheckboxPrimitive.Indicator>
-  </CheckboxPrimitive.Root>
-));
+  />
+);
 TableCheckbox.displayName = "TableCheckbox";
 
 export default TableCheckbox;

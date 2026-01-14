@@ -1,5 +1,5 @@
-import { InputProps } from "../../shadui/input";
+import type { ComponentProps } from "react";
 
-export interface ICustomInputProps extends InputProps {
+export type ICustomInputProps = ComponentProps<"input"> & {
   isError?: boolean;
-}
+};

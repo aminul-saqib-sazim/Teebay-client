@@ -38,7 +38,7 @@ const AppSidebar = () => {
             <SidebarMenu>
               {getSidebarMenuItem(activeOrganizationRole).map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

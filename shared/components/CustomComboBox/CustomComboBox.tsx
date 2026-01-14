@@ -59,7 +59,7 @@ const CustomComboBox: React.FC<TComboBoxProps> = ({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button
           variant={buttonVariant}
           size={buttonSize}

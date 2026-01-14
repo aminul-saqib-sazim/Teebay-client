@@ -1,14 +1,18 @@
 import { forwardRef } from "react";
 
-import { CheckboxProps } from "@radix-ui/react-checkbox";
-
 import { cn } from "@/lib/utils";
 
 import { Checkbox } from "../../shadui/checkbox";
 
-const CheckBoxInput = forwardRef<HTMLInputElement, CheckboxProps>(
+type CheckBoxInputProps = React.ComponentPropsWithoutRef<typeof Checkbox>;
+
+const CheckBoxInput = forwardRef<HTMLButtonElement, CheckBoxInputProps>(
   ({ className, ...props }, ref) => (
-    <Checkbox className={cn("rounded-[2px] border-input", className)} {...props} {...ref} />
+    <Checkbox
+      className={cn("rounded-[2px] border-input", className)}
+      {...props}
+      {...(ref as React.Ref<HTMLButtonElement>)}
+    />
   ),
 );
 

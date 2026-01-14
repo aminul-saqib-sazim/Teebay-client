@@ -94,7 +94,7 @@ const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
                   <FormLabel>Role</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    value={field.value}
+                    value={field.value ?? undefined}
                     disabled={isSubmitting}
                   >
                     <FormControl>

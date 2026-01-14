@@ -11,7 +11,6 @@ const NavButton: React.FC<INavButtonProps> = ({
   className,
   isNested = false,
   children,
-  ...props
 }) => (
   <CustomButton
     size="sm"
@@ -22,7 +21,6 @@ const NavButton: React.FC<INavButtonProps> = ({
       "flex justify-between items-center w-full hover:bg-muted",
       className,
     )}
-    {...props}
   >
     <div
       className={cn(

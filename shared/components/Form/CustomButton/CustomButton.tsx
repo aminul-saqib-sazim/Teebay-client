@@ -1,10 +1,11 @@
-import React, { FC } from "react";
+import React, { type FC } from "react";
+
+import { cn } from "@/lib/utils";
 
 import { Button } from "../../shadui/button";
-import { ICustomButtonProps } from "./CustomButton.types";
+import { buttonVariants, ICustomButtonProps } from "./CustomButton.types";
 
 const CustomButton: FC<ICustomButtonProps> = ({
-  type = "button",
   children,
   disabled = false,
   variant,
@@ -12,8 +13,7 @@ const CustomButton: FC<ICustomButtonProps> = ({
 }) => (
   <Button
     variant={variant}
-    className="w-full font-normal rounded-[4px]"
-    type={type}
+    className={cn(buttonVariants({ variant, className: "w-full font-normal rounded-lg" }))}
     disabled={disabled}
     {...props}
   >

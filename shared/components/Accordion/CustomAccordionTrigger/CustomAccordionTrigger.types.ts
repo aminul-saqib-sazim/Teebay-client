@@ -1,9 +1,7 @@
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 
-export interface ICustomAccordionTriggerProps extends React.ComponentPropsWithoutRef<
-  typeof AccordionPrimitive.Trigger
-> {
+export type ICustomAccordionTriggerProps = AccordionPrimitive.Trigger.Props & {
   openIcon?: React.ReactNode;
   closedIcon?: React.ReactNode;
   rotatableIcon?: React.ReactNode;
-}
+};

@@ -16,7 +16,7 @@ const SignedInUserAvatarAndMenu = ({ user }: { user: TSessionUser }) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Avatar className="h-8 w-8 cursor-pointer">
           <AvatarFallback>{user.email.slice(0, 1).toUpperCase()}</AvatarFallback>
         </Avatar>
