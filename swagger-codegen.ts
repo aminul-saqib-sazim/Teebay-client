@@ -22,7 +22,7 @@ function transformFileContent(fileContent: string) {
 
 /* NOTE: all fields are optional expect one of `input`, `url`, `spec` */
 generateApi({
-  name: "api.ts",
+  fileName: "api.ts",
   output: savePath,
   url: swaggerUrl,
 

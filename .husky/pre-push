@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+echo "Running Typescript compilation checks"
+
+npx tsc --noEmit
+
+if [ $? -ne 0 ]; then
+  echo "❌ Typescript compilation failed"
+  exit 1
+fi
+
+echo "✅ Typescript compilation passed"

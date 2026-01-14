@@ -5,7 +5,7 @@ const i18nConfig = {
   i18n: {
     defaultLocale: "en-US",
     locales: ["en-US", "ar-SA", "fr-FR"],
-    localeDetection: true,
+    localeDetection: false,
   },
   reloadOnPrerender: isLocal,
   pluralSeparator: "_",

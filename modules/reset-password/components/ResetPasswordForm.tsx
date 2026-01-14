@@ -28,14 +28,13 @@ const ResetPasswordForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
-          disabled={isSubmitting}
           control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="New Password" {...field} />
+                <PasswordInput placeholder="New Password" disabled={isSubmitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -43,14 +42,17 @@ const ResetPasswordForm = () => {
         />
 
         <FormField
-          disabled={isSubmitting}
           control={form.control}
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Confirm New Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="Confirm New Password" {...field} />
+                <PasswordInput
+                  placeholder="Confirm New Password"
+                  disabled={isSubmitting}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

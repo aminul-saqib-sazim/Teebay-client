@@ -1,7 +1,8 @@
 import i18nConfig from "./next-i18next.config.mjs";
-import { configureRuntimeEnv } from "next-runtime-env/build/configure.js";
-import { execSync } from "child_process";
 import withPWA from "next-pwa";
+import { configureRuntimeEnv } from "next-runtime-env/build/configure.js";
+
+import { execSync } from "child_process";
 
 configureRuntimeEnv();
 
@@ -71,7 +72,6 @@ const withPWAConfig = withPWA({
   ],
 });
 
-/** @type {import('next').NextConfig} */
 const nextConfig = withPWAConfig({
   generateBuildId: () => execSync("git rev-parse HEAD").toString().trim(),
 
@@ -88,6 +88,7 @@ const nextConfig = withPWAConfig({
   reactStrictMode: true,
   poweredByHeader: false,
   pageExtensions: ["page.tsx"],
+  output: "standalone",
   images: {
     domains: ["localhost"],
   },

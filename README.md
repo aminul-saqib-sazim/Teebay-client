@@ -28,6 +28,8 @@ If you add any new environment variables, please do the following:
 2. Update `shared/constants/env.constants.ts` and export the environment variable from the file. Note that we use the `env()` helper function from `next-runtime-env`.
 3. After that, you can use your environment variables in application code using the variables you exported in (2).
 
+**Important note: Only a specific version of `next-runtime-env` works with Next.js Pages Router. For Next.js Pages router applications, that version is v1.7.4. For Next.js App router applications, it is v3.2.1.**
+
 ## Conventions
 
 Please refer to [this document](https://docs.google.com/document/d/1BVaXGcIUM_FET4XZWtSHLVjaZv1z6fp2HZ3eW1uBKlA/edit) for conventions for this repository.

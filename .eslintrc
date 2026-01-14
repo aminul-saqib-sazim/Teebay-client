@@ -2,7 +2,7 @@
   "env": {
     "commonjs": true,
     "es2021": true,
-    "node": true
+    "node": true,
   },
   "extends": [
     "eslint:recommended",
@@ -10,29 +10,22 @@
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
   ],
   "overrides": [
     {
+      "plugins": ["jest"],
       "env": {
-        "jest": true
+        "jest": true,
       },
-      "files": ["**/*.spec.js", "**/*.spec.jsx", "**/*.test.js", "**/*.test.jsx"]
-    }
+      "files": ["**/*.spec.js", "**/*.spec.jsx", "**/*.test.js", "**/*.test.jsx"],
+    },
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
   },
-  "plugins": [
-    "@typescript-eslint",
-    "prettier",
-    "react",
-    "autofix",
-    "react-hooks",
-    "eslint-plugin-import-helpers"
-  ],
+  "plugins": ["@typescript-eslint", "prettier", "react", "autofix", "eslint-plugin-import-helpers"],
   "root": true,
   "ignorePatterns": ["shared/components/shadui"],
   "rules": {
@@ -45,24 +38,24 @@
         "groups": ["/^react$/", "/next.*/", ["module"], "/@/.*/", ["absolute"]],
         "alphabetize": {
           "order": "asc",
-          "ignoreCase": true
-        }
-      }
+          "ignoreCase": true,
+        },
+      },
     ],
     "linebreak-style": ["warn", "unix"],
     "eol-last": ["warn", "always"],
     "no-restricted-imports": [
       "warn",
       {
-        "patterns": ["../../../*", "!../*", "!../../*", "!test/**/*"]
-      }
+        "patterns": ["../../../*", "!../*", "!../../*", "!test/**/*"],
+      },
     ],
     "react/self-closing-comp": [
       "warn",
       {
         "component": true,
-        "html": true
-      }
+        "html": true,
+      },
     ],
     "react/react-in-jsx-scope": "off",
     "no-const-assign": "warn",
@@ -77,8 +70,8 @@
       {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_"
-      }
+        "caughtErrorsIgnorePattern": "^_",
+      },
     ],
     "no-useless-catch": "warn",
     "no-useless-escape": "warn",
@@ -93,6 +86,6 @@
     "react/prop-types": "off",
     "require-await": "warn",
     "semi": ["warn", "always"],
-    "spaced-comment": ["warn", "always", { "exceptions": ["-", "+"] }]
-  }
+    "spaced-comment": ["warn", "always", { "exceptions": ["-", "+"] }],
+  },
 }

@@ -31,6 +31,8 @@ const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
   const { form, onSubmit } = useInviteUserForm({ onOpenChange });
   const isSubmitting = form.formState.isSubmitting;
 
+  console.log("test");
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -49,7 +51,7 @@ const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="First Name" {...field} />
+                    <Input disabled={isSubmitting} placeholder="First Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -63,7 +65,7 @@ const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Last Name" {...field} />
+                    <Input disabled={isSubmitting} placeholder="Last Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,7 +79,7 @@ const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" type="email" {...field} />
+                    <Input disabled={isSubmitting} placeholder="Email" type="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -90,7 +92,11 @@ const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={isSubmitting}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a role" />
