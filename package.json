@@ -93,7 +93,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "husky": "^8.0.3",
     "jsdom": "^25.0.1",
-    "lint-staged": "^15.4.3",
+    "lint-staged": "^16.2.7",
     "postcss": "^8.5.2",
     "prettier": "^3.5.1",
     "swagger-typescript-api": "^13.0.23",
