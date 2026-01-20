@@ -9,7 +9,6 @@ import {
 } from "@/shared/components/shadui/form";
 import { Input } from "@/shared/components/shadui/input";
 import { Textarea } from "@/shared/components/shadui/textarea";
-import { MultiSelect } from "@/shared/components/shadui/multi-select"; // Assuming generic MultiSelect exists, checking later or building simple select
 import {
   ICreateProductDto,
   EProductCategory,

@@ -1,7 +1,6 @@
-import { TApiResponse, TPaginationMetadata } from "@/shared/typedefs";
+import { TApiResponse } from "@/shared/typedefs";
 
 import projectApi from "../api.config";
-import { IBackendPaginationMeta } from "../users/users.interfaces";
 import {
   ICreateProductDto,
   IGetProductsParams,
@@ -9,15 +8,6 @@ import {
   IProduct,
   IUpdateProductDto,
 } from "./products.interfaces";
-
-const transformPaginationMeta = (meta: IBackendPaginationMeta): TPaginationMetadata => ({
-  currentPage: meta.page,
-  itemsPerPage: meta.limit,
-  totalItems: meta.total,
-  totalPages: meta.totalPages,
-  hasNextPage: meta.page < meta.totalPages,
-  hasPreviousPage: meta.page > 1,
-});
 
 const productsApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -87,7 +77,7 @@ const productsApi = projectApi.injectEndpoints({
         url: `products/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (_result, _error, id) => [
         { type: "Products" as const, id },
         { type: "Products" as const, id: "LIST" },
       ],
@@ -98,7 +88,7 @@ const productsApi = projectApi.injectEndpoints({
         url: `products/${id}/buy`,
         method: "POST",
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (_result, _error, id) => [
         { type: "Products" as const, id },
         // Might need to invalidate User balance/Audit logs/etc
       ],
@@ -109,7 +99,7 @@ const productsApi = projectApi.injectEndpoints({
         url: `products/${id}/rent`,
         method: "POST",
       }),
-      invalidatesTags: (result, error, id) => [{ type: "Products" as const, id }],
+      invalidatesTags: (_result, _error, id) => [{ type: "Products" as const, id }],
     }),
   }),
   overrideExisting: false,

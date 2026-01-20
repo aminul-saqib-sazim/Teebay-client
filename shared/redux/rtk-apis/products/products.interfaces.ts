@@ -1,4 +1,4 @@
-import { IBackendPaginationMeta, IUserResponse } from "../users/users.interfaces";
+import { IUserResponse } from "../users/users.interfaces";
 
 export enum EProductCategory {
   ELECTRONICS = "ELECTRONICS",
