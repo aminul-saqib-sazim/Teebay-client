@@ -25,7 +25,7 @@ import { IProduct, EProductCategory } from "@/shared/redux/rtk-apis/products/pro
 import { useMeQuery } from "@/shared/redux/rtk-apis/users/users.api";
 
 import ProductsTable from "../../components/ProductsTable";
-import ProductDialog from "../../components/ProductDialog";
+import ProductDialog from "../../components/ProductDialog/ProductDialog";
 
 import {
   Select,
@@ -130,8 +130,10 @@ const ProductsContainer = () => {
 
         return (
           <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="ghost" className="h-8 w-8 p-0" />}>
-              <MoreVertical className="h-4 w-4" />
+            <DropdownMenuTrigger>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {isOwner && (
@@ -172,7 +174,7 @@ const ProductsContainer = () => {
     <div className="container py-6">
       <ProductDialog
         isOpen={isDialogOpen}
-        onOpenChange={(open) => {
+        onOpenChange={(open: boolean) => {
           setIsDialogOpen(open);
           if (!open) setSelectedProduct(undefined);
         }}
