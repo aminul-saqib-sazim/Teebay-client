@@ -1,10 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import {
-  EProductCategory,
-  ICreateProductDto,
-  IProduct,
-} from "@/shared/redux/rtk-apis/products/products.interfaces";
+import { EProductCategory, IProduct } from "@/shared/redux/rtk-apis/products/products.interfaces";
+import { ICreateProductDto } from "@/shared/typedefs/api";
 
 export const getProductFormInitialValues = (product?: IProduct): ICreateProductDto => ({
   title: product?.title || "",

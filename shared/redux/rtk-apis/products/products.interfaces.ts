@@ -21,23 +21,6 @@ export interface IProduct {
   updated_at: string;
 }
 
-export interface ICreateProductDto {
-  title: string;
-  description: string;
-  price: number;
-  quantity: number;
-  categories: EProductCategory[];
-}
-
-export interface IUpdateProductDto extends Partial<ICreateProductDto> {}
-
-export interface IGetProductsParams {
-  page?: number;
-  limit?: number;
-  search?: string;
-  category?: EProductCategory;
-}
-
 export interface IPaginatedProductsResponse {
   data: IProduct[];
   meta: {

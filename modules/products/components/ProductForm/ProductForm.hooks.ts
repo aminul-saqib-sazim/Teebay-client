@@ -5,8 +5,9 @@ import {
   useCreateProductMutation,
   useUpdateProductMutation,
 } from "@/shared/redux/rtk-apis/products/products.api";
-import { ICreateProductDto, IProduct } from "@/shared/redux/rtk-apis/products/products.interfaces";
+import { IProduct } from "@/shared/redux/rtk-apis/products/products.interfaces";
 import { getProductFormInitialValues, productFormResolver } from "./ProductForm.helpers";
+import { ICreateProductDto } from "@/shared/typedefs/api";
 
 interface IUseProductFormProps {
   product?: IProduct | null;

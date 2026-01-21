@@ -1,13 +1,8 @@
 import { TApiResponse } from "@/shared/typedefs";
 
 import projectApi from "../api.config";
-import {
-  ICreateProductDto,
-  IGetProductsParams,
-  IPaginatedProductsResponse,
-  IProduct,
-  IUpdateProductDto,
-} from "./products.interfaces";
+import { IPaginatedProductsResponse, IProduct } from "./products.interfaces";
+import { ICreateProductDto, IGetProductsParams, IUpdateProductDto } from "@/shared/typedefs/api";
 
 const productsApi = projectApi.injectEndpoints({
   endpoints: (builder) => ({

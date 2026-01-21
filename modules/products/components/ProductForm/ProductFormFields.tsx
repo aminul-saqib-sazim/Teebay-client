@@ -9,21 +9,10 @@ import {
 } from "@/shared/components/shadui/form";
 import { Input } from "@/shared/components/shadui/input";
 import { Textarea } from "@/shared/components/shadui/textarea";
-import {
-  ICreateProductDto,
-  EProductCategory,
-} from "@/shared/redux/rtk-apis/products/products.interfaces";
-
-// If MultiSelect doesn't exist, I might need to implement a simple one or use checkboxes.
-// Checking UsersContainer for how roles are selected or filters.
-// Assuming a standard Select or MultiSelect needs to be verified.
-// For now, I will use a simple Select (HTML) or skip if I can't verifying.
-// Actually, `shadui` usually has `Select`. Multi-select is harder.
-// I'll implement a simple checkbox group for categories for now if MultiSelect is missing.
-// Or just checking if I can use the existing `Select` from shadui with `multiple`? No shadcn select doesn't support multiple easily.
-// I'll check if `MultiSelect` exists in shared components.
+import { EProductCategory } from "@/shared/redux/rtk-apis/products/products.interfaces";
 
 import { Checkbox } from "@/shared/components/shadui/checkbox";
+import { ICreateProductDto } from "@/shared/typedefs/api";
 
 interface IProductFormFieldsProps {
   form: UseFormReturn<ICreateProductDto>;
