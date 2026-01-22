@@ -7,6 +7,16 @@ import { toast } from "sonner";
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shared/components/shadui/alert-dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -60,6 +70,11 @@ const ProductsContainer = () => {
   const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const [confirmationData, setConfirmationData] = useState<{
+    productId: string;
+    action: "BUY" | "RENT";
+  } | null>(null);
+
   const handleEdit = (product: IProduct) => {
     setSelectedProduct(product);
     setIsDialogOpen(true);
@@ -76,21 +91,32 @@ const ProductsContainer = () => {
     }
   };
 
-  const handleBuy = async (id: string) => {
-    try {
-      await buyProduct(id).unwrap();
-      toast.success("Product purchased successfully");
-    } catch (error) {
-      toast.error("Failed to buy product", { description: parseApiErrorMessage(error) });
-    }
+  const handleBuy = (id: string) => {
+    setConfirmationData({ productId: id, action: "BUY" });
   };
 
-  const handleRent = async (id: string) => {
+  const handleRent = (id: string) => {
+    setConfirmationData({ productId: id, action: "RENT" });
+  };
+
+  const handleConfirmAction = async () => {
+    if (!confirmationData) return;
+    const { productId, action } = confirmationData;
+
     try {
-      await rentProduct(id).unwrap();
-      toast.success("Product rented successfully");
+      if (action === "BUY") {
+        await buyProduct(productId).unwrap();
+        toast.success("Product purchased successfully");
+      } else {
+        await rentProduct(productId).unwrap();
+        toast.success("Product rented successfully");
+      }
     } catch (error) {
-      toast.error("Failed to rent product", { description: parseApiErrorMessage(error) });
+      toast.error(`Failed to ${action.toLowerCase()} product`, {
+        description: parseApiErrorMessage(error),
+      });
+    } finally {
+      setConfirmationData(null);
     }
   };
 
@@ -173,6 +199,26 @@ const ProductsContainer = () => {
 
   return (
     <div className="container py-6">
+      <AlertDialog
+        open={!!confirmationData}
+        onOpenChange={(open) => !open && setConfirmationData(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will {confirmationData?.action === "BUY" ? "purchase" : "rent"} the product "
+              {productsData?.data.find((p) => p.id === confirmationData?.productId)?.title}". This
+              action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmAction}>Confirm</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <ProductDialog
         isOpen={isDialogOpen}
         onOpenChange={(open: boolean) => {
