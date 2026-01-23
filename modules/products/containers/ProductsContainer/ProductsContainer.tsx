@@ -45,7 +45,6 @@ import {
 } from "@/shared/components/shadui/select";
 import { Input } from "@/shared/components/shadui/input";
 import { Label } from "@/shared/components/shadui/label";
-import { parseApiErrorMessage } from "@/shared/utils/errors";
 
 export const PAGINATION_LIMIT_OPTIONS = [5, 10, 20, 50];
 
