@@ -86,6 +86,8 @@ const ProductsContainer = () => {
     action: "BUY" | "RENT" | "DELETE";
   } | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [rentStartDate, setRentStartDate] = useState("");
+  const [rentEndDate, setRentEndDate] = useState("");
 
   const handleClearFilters = () => {
     setQueryStates({
@@ -115,11 +117,15 @@ const ProductsContainer = () => {
   const handleBuy = (id: string) => {
     setConfirmationData({ productId: id, action: "BUY" });
     setQuantity(1);
+    setRentStartDate("");
+    setRentEndDate("");
   };
 
   const handleRent = (id: string) => {
     setConfirmationData({ productId: id, action: "RENT" });
     setQuantity(1);
+    setRentStartDate("");
+    setRentEndDate("");
   };
 
   const handleConfirmAction = async () => {
@@ -131,7 +137,12 @@ const ProductsContainer = () => {
         await buyProduct({ id: productId, quantity }).unwrap();
         toast.success("Product purchased successfully");
       } else if (action === "RENT") {
-        await rentProduct({ id: productId, quantity }).unwrap();
+        await rentProduct({
+          id: productId,
+          quantity,
+          rentStartDate: rentStartDate || undefined,
+          rentEndDate: rentEndDate || undefined,
+        }).unwrap();
         toast.success("Product rented successfully");
       } else {
         await deleteProduct(productId).unwrap();
@@ -209,22 +220,9 @@ const ProductsContainer = () => {
               ) : (
                 <div className="space-y-4 pt-2">
                   <p>
-                    This will {confirmationData?.action === "BUY" ? "purchase" : "rent"} the product "
-                    <span className="font-semibold">
-                      {productsData?.data.find((p) => p.id === confirmationData?.productId)?.title}
-                    </span>
-                    " for{" "}
-                    <span className="font-semibold">
-                      $
-                      {confirmationData?.action === "BUY"
-                        ? productsData?.data.find((p) => p.id === confirmationData?.productId)
-                          ?.price
-                        : productsData?.data.find((p) => p.id === confirmationData?.productId)
-                          ?.rentalPrice}
-                    </span>
-                    {confirmationData?.action === "RENT" &&
-                      ` per ${productsData?.data.find((p) => p.id === confirmationData?.productId)?.rentOption === "HOURLY" ? "hour" : "day"}`}
-                    . This action cannot be undone.
+                    {confirmationData?.action === "BUY"
+                      ? "Are you want to buy this product?"
+                      : "Are you want to rent this product?"}
                   </p>
                   <div className="space-y-2">
                     <Label htmlFor="quantity">Quantity</Label>
@@ -237,17 +235,45 @@ const ProductsContainer = () => {
                       onChange={(e) => setQuantity(Number(e.target.value))}
                     />
                   </div>
+                  {confirmationData?.action === "RENT" && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="rentStart">From</Label>
+                        <Input
+                          id="rentStart"
+                          type="date"
+                          value={rentStartDate}
+                          onChange={(e) => setRentStartDate(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="rentEnd">To</Label>
+                        <Input
+                          id="rentEnd"
+                          type="date"
+                          value={rentEndDate}
+                          onChange={(e) => setRentEndDate(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-700">
+              {confirmationData?.action === "DELETE" ? "Cancel" : "No"}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmAction}
-              className={confirmationData?.action === "DELETE" ? "bg-red-600 hover:bg-red-700" : ""}
+              className={
+                confirmationData?.action === "DELETE"
+                  ? "bg-red-600 hover:bg-red-700"
+                  : "bg-green-600 hover:bg-green-700 text-white"
+              }
             >
-              Confirm
+              {confirmationData?.action === "DELETE" ? "Confirm" : "Yes"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

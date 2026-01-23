@@ -89,11 +89,14 @@ const productsApi = projectApi.injectEndpoints({
       ],
     }),
 
-    rentProduct: builder.mutation<void, { id: string; quantity: number }>({
-      query: ({ id, quantity }) => ({
+    rentProduct: builder.mutation<
+      void,
+      { id: string; quantity: number; rentStartDate?: string; rentEndDate?: string }
+    >({
+      query: ({ id, quantity, rentStartDate, rentEndDate }) => ({
         url: `products/${id}/rent`,
         method: "POST",
-        body: { quantity },
+        body: { quantity, rentStartDate, rentEndDate },
       }),
       invalidatesTags: (_result, _error, { id }) => [
         { type: "Products" as const, id },
