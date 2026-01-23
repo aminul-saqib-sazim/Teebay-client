@@ -9,7 +9,18 @@ import {
 } from "@/shared/components/shadui/form";
 import { Input } from "@/shared/components/shadui/input";
 import { Textarea } from "@/shared/components/shadui/textarea";
-import { EProductCategory } from "@/shared/redux/rtk-apis/products/products.interfaces";
+import {
+  EProductCategory,
+  ERentOption,
+} from "@/shared/redux/rtk-apis/products/products.interfaces";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/shadui/select";
 
 import { Checkbox } from "@/shared/components/shadui/checkbox";
 import { ICreateProductDto } from "@/shared/typedefs/api";
@@ -54,7 +65,7 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price</FormLabel>
+              <FormLabel>Purchase Price</FormLabel>
               <FormControl>
                 <Input type="number" placeholder="Price" {...field} disabled={isSubmitting} />
               </FormControl>
@@ -64,18 +75,61 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
         />
         <FormField
           control={form.control}
-          name="quantity"
+          name="rentalPrice"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Quantity</FormLabel>
+              <FormLabel>Rental Price</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Quantity" {...field} disabled={isSubmitting} />
+                <Input type="number" placeholder="Rental Price" {...field} disabled={isSubmitting} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
       </div>
+
+      <FormField
+        control={form.control}
+        name="rentOption"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Rental Option</FormLabel>
+            <Select
+              disabled={isSubmitting}
+              onValueChange={field.onChange}
+              value={field.value}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a rental option" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {Object.values(ERentOption).map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option === ERentOption.HOURLY ? "Per Hour" : "Per Day"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="quantity"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Quantity</FormLabel>
+            <FormControl>
+              <Input type="number" placeholder="Quantity" {...field} disabled={isSubmitting} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <FormField
         control={form.control}
@@ -104,8 +158,8 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
                               return checked
                                 ? field.onChange([...field.value, category])
                                 : field.onChange(
-                                    field.value?.filter((value) => value !== category),
-                                  );
+                                  field.value?.filter((value) => value !== category),
+                                );
                             }}
                           />
                         </FormControl>

@@ -132,6 +132,15 @@ const ProductsContainer = () => {
       cell: ({ row }) => `$${row.original.price}`,
     },
     {
+      accessorKey: "rentalPrice",
+      header: "Rental Price",
+      cell: ({ row }) => {
+        const { rentalPrice, rentOption } = row.original;
+        const optionLabel = rentOption === "HOURLY" ? "hour" : "day";
+        return `$${rentalPrice}/${optionLabel}`;
+      },
+    },
+    {
       accessorKey: "quantity",
       header: "Quantity",
     },
@@ -223,7 +232,18 @@ const ProductsContainer = () => {
                     <span className="font-semibold">
                       {productsData?.data.find((p) => p.id === confirmationData?.productId)?.title}
                     </span>
-                    ". This action cannot be undone.
+                    " for{" "}
+                    <span className="font-semibold">
+                      $
+                      {confirmationData?.action === "BUY"
+                        ? productsData?.data.find((p) => p.id === confirmationData?.productId)
+                          ?.price
+                        : productsData?.data.find((p) => p.id === confirmationData?.productId)
+                          ?.rentalPrice}
+                    </span>
+                    {confirmationData?.action === "RENT" &&
+                      ` per ${productsData?.data.find((p) => p.id === confirmationData?.productId)?.rentOption === "HOURLY" ? "hour" : "day"}`}
+                    . This action cannot be undone.
                   </p>
                   <div className="space-y-2">
                     <Label htmlFor="quantity">Quantity</Label>

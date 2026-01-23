@@ -9,16 +9,42 @@ export enum EProductCategory {
   TOYS = "TOYS",
 }
 
+export enum ERentOption {
+  HOURLY = "HOURLY",
+  DAILY = "DAILY",
+}
+
 export interface IProduct {
   id: string;
   title: string;
   description: string;
   price: number;
+  rentalPrice: number;
+  rentOption?: ERentOption;
   quantity: number;
   categories: EProductCategory[];
   owner: IUserResponse;
   created_at: string;
   updated_at: string;
+}
+
+export interface ICreateProductDto {
+  title: string;
+  description: string;
+  price: number;
+  rentalPrice: number;
+  rentOption?: ERentOption;
+  quantity: number;
+  categories: EProductCategory[];
+}
+
+export interface IUpdateProductDto extends Partial<ICreateProductDto> { }
+
+export interface IGetProductsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: EProductCategory;
 }
 
 export interface IPaginatedProductsResponse {
