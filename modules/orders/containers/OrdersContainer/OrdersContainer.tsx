@@ -42,8 +42,21 @@ const OrdersContainer = () => {
     },
     {
       accessorKey: "price",
-      header: "Price",
+      header: "Unit Price",
       cell: ({ row }: { row: { original: IOrder } }) => `$${row.original.price}`,
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity",
+      cell: ({ row }: { row: { original: IOrder } }) => row.original.quantity || 1,
+    },
+    {
+      id: "totalPrice",
+      header: "Total Price",
+      cell: ({ row }: { row: { original: IOrder } }) => {
+        const { price, quantity = 1 } = row.original;
+        return `$${(price * quantity).toFixed(2)}`;
+      },
     },
     {
       accessorKey: "createdAt",
@@ -53,25 +66,25 @@ const OrdersContainer = () => {
     },
     ...(type === "BUY"
       ? [
-          {
-            accessorKey: "product.owner",
-            header: "Seller",
-            cell: ({ row }: { row: { original: IOrder } }) => {
-              const owner = row.original.product?.owner;
-              return owner ? `${owner.firstName} ${owner.lastName}` : "Unknown";
-            },
+        {
+          accessorKey: "product.owner",
+          header: "Seller",
+          cell: ({ row }: { row: { original: IOrder } }) => {
+            const owner = row.original.product?.owner;
+            return owner ? `${owner.firstName} ${owner.lastName}` : "Unknown";
           },
-        ]
+        },
+      ]
       : [
-          {
-            accessorKey: "buyer",
-            header: "Buyer",
-            cell: ({ row }: { row: { original: IOrder } }) => {
-              const buyer = row.original.buyer;
-              return buyer ? `${buyer.firstName} ${buyer.lastName}` : "Unknown";
-            },
+        {
+          accessorKey: "buyer",
+          header: "Buyer",
+          cell: ({ row }: { row: { original: IOrder } }) => {
+            const buyer = row.original.buyer;
+            return buyer ? `${buyer.firstName} ${buyer.lastName}` : "Unknown";
           },
-        ]),
+        },
+      ]),
   ];
 
   if (isLoadingOrders || isLoadingSales) {

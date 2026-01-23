@@ -44,6 +44,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/shadui/select";
+import { Input } from "@/shared/components/shadui/input";
+import { Label } from "@/shared/components/shadui/label";
 import { parseApiErrorMessage } from "@/shared/utils/errors";
 
 export const PAGINATION_LIMIT_OPTIONS = [5, 10, 20, 50];
@@ -72,8 +74,9 @@ const ProductsContainer = () => {
 
   const [confirmationData, setConfirmationData] = useState<{
     productId: string;
-    action: "BUY" | "RENT";
+    action: "BUY" | "RENT" | "DELETE";
   } | null>(null);
+  const [quantity, setQuantity] = useState(1);
 
   const handleEdit = (product: IProduct) => {
     setSelectedProduct(product);
@@ -81,22 +84,17 @@ const ProductsContainer = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this product?")) {
-      try {
-        await deleteProduct(id).unwrap();
-        toast.success("Product deleted successfully");
-      } catch (error) {
-        toast.error("Failed to delete product", { description: parseApiErrorMessage(error) });
-      }
-    }
+    setConfirmationData({ productId: id, action: "DELETE" });
   };
 
   const handleBuy = (id: string) => {
     setConfirmationData({ productId: id, action: "BUY" });
+    setQuantity(1);
   };
 
   const handleRent = (id: string) => {
     setConfirmationData({ productId: id, action: "RENT" });
+    setQuantity(1);
   };
 
   const handleConfirmAction = async () => {
@@ -105,11 +103,14 @@ const ProductsContainer = () => {
 
     try {
       if (action === "BUY") {
-        await buyProduct(productId).unwrap();
+        await buyProduct({ id: productId, quantity }).unwrap();
         toast.success("Product purchased successfully");
-      } else {
-        await rentProduct(productId).unwrap();
+      } else if (action === "RENT") {
+        await rentProduct({ id: productId, quantity }).unwrap();
         toast.success("Product rented successfully");
+      } else {
+        await deleteProduct(productId).unwrap();
+        toast.success("Product deleted successfully");
       }
     } catch (error) {
       toast.error(`Failed to ${action.toLowerCase()} product`, {
@@ -207,14 +208,46 @@ const ProductsContainer = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will {confirmationData?.action === "BUY" ? "purchase" : "rent"} the product "
-              {productsData?.data.find((p) => p.id === confirmationData?.productId)?.title}". This
-              action cannot be undone.
+              {confirmationData?.action === "DELETE" ? (
+                <>
+                  This will permanently delete the product "
+                  <span className="font-semibold">
+                    {productsData?.data.find((p) => p.id === confirmationData?.productId)?.title}
+                  </span>
+                  ". This action cannot be undone.
+                </>
+              ) : (
+                <div className="space-y-4 pt-2">
+                  <p>
+                    This will {confirmationData?.action === "BUY" ? "purchase" : "rent"} the product "
+                    <span className="font-semibold">
+                      {productsData?.data.find((p) => p.id === confirmationData?.productId)?.title}
+                    </span>
+                    ". This action cannot be undone.
+                  </p>
+                  <div className="space-y-2">
+                    <Label htmlFor="quantity">Quantity</Label>
+                    <Input
+                      id="quantity"
+                      type="number"
+                      min={1}
+                      max={productsData?.data.find((p) => p.id === confirmationData?.productId)?.quantity}
+                      value={quantity}
+                      onChange={(e) => setQuantity(Number(e.target.value))}
+                    />
+                  </div>
+                </div>
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmAction}>Confirm</AlertDialogAction>
+            <AlertDialogAction
+              onClick={handleConfirmAction}
+              className={confirmationData?.action === "DELETE" ? "bg-red-600 hover:bg-red-700" : ""}
+            >
+              Confirm
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

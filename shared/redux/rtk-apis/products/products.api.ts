@@ -37,9 +37,9 @@ const productsApi = projectApi.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "Products" as const, id })),
-              { type: "Products" as const, id: "LIST" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "Products" as const, id })),
+            { type: "Products" as const, id: "LIST" },
+          ]
           : [{ type: "Products" as const, id: "LIST" }],
     }),
 
@@ -77,23 +77,25 @@ const productsApi = projectApi.injectEndpoints({
       ],
     }),
 
-    buyProduct: builder.mutation<void, string>({
-      query: (id) => ({
+    buyProduct: builder.mutation<void, { id: string; quantity: number }>({
+      query: ({ id, quantity }) => ({
         url: `products/${id}/buy`,
         method: "POST",
+        body: { quantity },
       }),
-      invalidatesTags: (_result, _error, id) => [
+      invalidatesTags: (_result, _error, { id }) => [
         { type: "Products" as const, id },
         { type: "Products" as const, id: "LIST" },
       ],
     }),
 
-    rentProduct: builder.mutation<void, string>({
-      query: (id) => ({
+    rentProduct: builder.mutation<void, { id: string; quantity: number }>({
+      query: ({ id, quantity }) => ({
         url: `products/${id}/rent`,
         method: "POST",
+        body: { quantity },
       }),
-      invalidatesTags: (_result, _error, id) => [
+      invalidatesTags: (_result, _error, { id }) => [
         { type: "Products" as const, id },
         { type: "Products" as const, id: "LIST" },
       ],
