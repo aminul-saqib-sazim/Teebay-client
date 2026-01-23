@@ -14,6 +14,11 @@ export enum ERentOption {
   DAILY = "DAILY",
 }
 
+export enum EProductListingType {
+  BUY = "BUY",
+  RENT = "RENT",
+}
+
 export interface IProduct {
   id: string;
   title: string;
@@ -45,6 +50,9 @@ export interface IGetProductsParams {
   limit?: number;
   search?: string;
   category?: EProductCategory;
+  listingType?: EProductListingType;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export interface IPaginatedProductsResponse {

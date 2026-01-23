@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { useQueryStates, parseAsInteger, parseAsString } from "nuqs";
+import { useQueryStates, parseAsInteger, parseAsString, parseAsFloat } from "nuqs";
 import { toast } from "sonner";
 
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
@@ -24,7 +24,11 @@ import {
   useBuyProductMutation,
   useRentProductMutation,
 } from "@/shared/redux/rtk-apis/products/products.api";
-import { IProduct, EProductCategory } from "@/shared/redux/rtk-apis/products/products.interfaces";
+import {
+  IProduct,
+  EProductCategory,
+  EProductListingType,
+} from "@/shared/redux/rtk-apis/products/products.interfaces";
 import { useMeQuery } from "@/shared/redux/rtk-apis/users/users.api";
 
 import ProductsTable from "../../components/ProductsTable";
@@ -45,10 +49,15 @@ import { parseApiErrorMessage } from "@/shared/utils/errors";
 export const PAGINATION_LIMIT_OPTIONS = [5, 10, 20, 50];
 
 const ProductsContainer = () => {
-  const [{ page, limit, category }, setQueryStates] = useQueryStates({
+  const [{ page, limit, category, search, listingType, minPrice, maxPrice }, setQueryStates] =
+    useQueryStates({
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
     category: parseAsString.withDefault(""),
+    search: parseAsString.withDefault(""),
+    listingType: parseAsString.withDefault(""),
+    minPrice: parseAsFloat,
+    maxPrice: parseAsFloat,
   });
 
   const { data: user } = useMeQuery();
@@ -56,7 +65,11 @@ const ProductsContainer = () => {
   const { data: productsData, isLoading } = useGetProductsQuery({
     page,
     limit,
+    search: search || undefined,
     category: (category as EProductCategory) || undefined,
+    listingType: (listingType as EProductListingType) || undefined,
+    minPrice: minPrice ?? undefined,
+    maxPrice: maxPrice ?? undefined,
   });
 
   const [deleteProduct] = useDeleteProductMutation();
@@ -73,6 +86,17 @@ const ProductsContainer = () => {
     action: "BUY" | "RENT" | "DELETE";
   } | null>(null);
   const [quantity, setQuantity] = useState(1);
+
+  const handleClearFilters = () => {
+    setQueryStates({
+      page: 1,
+      search: "",
+      category: "",
+      listingType: "",
+      minPrice: null,
+      maxPrice: null,
+    });
+  };
 
   const handleEdit = (product: IProduct) => {
     setSelectedProduct(product);
@@ -264,29 +288,108 @@ const ProductsContainer = () => {
         }}
       />
 
-      <div className="flex flex-row items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Products</h1>
-        <div className="flex gap-4">
-          <Button onClick={() => setIsDialogOpen(true)}>Add Product</Button>
+      <div className="flex flex-col gap-4 mb-6">
+        <div className="flex flex-row items-center justify-between">
+          <h1 className="text-3xl font-bold">Products</h1>
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={handleClearFilters}>
+              Clear Filters
+            </Button>
+            <Button onClick={() => setIsDialogOpen(true)}>Add Product</Button>
+          </div>
+        </div>
 
-          <Select
-            value={category}
-            onValueChange={(value) => {
-              setQueryStates({ category: value === "all" ? "" : value, page: 1 });
-            }}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="All Categories" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              {Object.values(EProductCategory).map((cat) => (
-                <SelectItem key={cat} value={cat}>
-                  {cat}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="search">Search</Label>
+            <Input
+              id="search"
+              placeholder="Search by title"
+              value={search}
+              onChange={(e) => setQueryStates({ search: e.target.value, page: 1 })}
+              className="w-[220px]"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Category</Label>
+            <Select
+              value={category}
+              onValueChange={(value) => {
+                setQueryStates({ category: value === "all" ? "" : value, page: 1 });
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {Object.values(EProductCategory).map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Listing Type</Label>
+            <Select
+              value={listingType}
+              onValueChange={(value) => {
+                setQueryStates({ listingType: value === "all" ? "" : value, page: 1 });
+              }}
+            >
+              <SelectTrigger className="w-[160px]">
+                <SelectValue placeholder="All Types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {Object.values(EProductListingType).map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="minPrice">Min Price</Label>
+            <Input
+              id="minPrice"
+              type="number"
+              min={0}
+              placeholder="0"
+              value={minPrice ?? ""}
+              onChange={(e) =>
+                setQueryStates({
+                  minPrice: e.target.value === "" ? null : Number(e.target.value),
+                  page: 1,
+                })
+              }
+              className="w-[120px]"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="maxPrice">Max Price</Label>
+            <Input
+              id="maxPrice"
+              type="number"
+              min={0}
+              placeholder="0"
+              value={maxPrice ?? ""}
+              onChange={(e) =>
+                setQueryStates({
+                  maxPrice: e.target.value === "" ? null : Number(e.target.value),
+                  page: 1,
+                })
+              }
+              className="w-[120px]"
+            />
+          </div>
         </div>
       </div>
 
