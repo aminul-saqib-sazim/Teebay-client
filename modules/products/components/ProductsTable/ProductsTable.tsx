@@ -43,7 +43,11 @@ const ProductsTable = ({ data, columns, onRowClick }: TProductsTableProps) => {
           <TableRow
             key={row.id}
             onClick={() => onRowClick?.(row.original)}
-            className={onRowClick ? "cursor-pointer hover:bg-muted/50" : undefined}
+            className={
+              onRowClick
+                ? "cursor-pointer transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                : undefined
+            }
           >
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>

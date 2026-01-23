@@ -10,7 +10,7 @@ import {
 } from "@/shared/components/shadui/table";
 import { TOrdersTableProps } from "./OrdersTable.types";
 
-const OrdersTable = ({ data, columns }: TOrdersTableProps) => {
+const OrdersTable = ({ data, columns, onRowClick }: TOrdersTableProps) => {
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>([]);
 
   const table = useReactTable({
@@ -40,7 +40,15 @@ const OrdersTable = ({ data, columns }: TOrdersTableProps) => {
       </TableHeader>
       <TableBody>
         {table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
+          <TableRow
+            key={row.id}
+            onClick={() => onRowClick?.(row.original)}
+            className={
+              onRowClick
+                ? "cursor-pointer transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                : undefined
+            }
+          >
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}

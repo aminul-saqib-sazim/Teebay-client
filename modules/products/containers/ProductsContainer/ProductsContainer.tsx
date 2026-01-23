@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
+import { Badge } from "@/shared/components/shadui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -124,7 +125,8 @@ const ProductsContainer = () => {
   const handleRent = (id: string) => {
     setConfirmationData({ productId: id, action: "RENT" });
     setQuantity(1);
-    setRentStartDate("");
+    const today = new Date().toISOString().split("T")[0] ?? "";
+    setRentStartDate(today);
     setRentEndDate("");
   };
 
@@ -137,6 +139,14 @@ const ProductsContainer = () => {
         await buyProduct({ id: productId, quantity }).unwrap();
         toast.success("Product purchased successfully");
       } else if (action === "RENT") {
+        if (!rentStartDate) {
+          toast.error("Rent start date is required");
+          return;
+        }
+        if (rentEndDate && rentEndDate < rentStartDate) {
+          toast.error("Rent end date must be on or after start date");
+          return;
+        }
         await rentProduct({
           id: productId,
           quantity,
@@ -148,9 +158,9 @@ const ProductsContainer = () => {
         await deleteProduct(productId).unwrap();
         toast.success("Product deleted successfully");
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.error(`Failed to ${action.toLowerCase()} product`, {
-        description: parseApiErrorMessage(error),
+        description: error?.data?.message || error?.message || "Something went wrong",
       });
     } finally {
       setConfirmationData(null);
@@ -161,6 +171,16 @@ const ProductsContainer = () => {
     {
       accessorKey: "title",
       header: "Title",
+      cell: ({ row }) => {
+        const isOwner = user?.id === row.original.owner?.id;
+
+        return (
+          <div className="flex items-center gap-2">
+            <span>{row.original.title}</span>
+            {isOwner && <Badge variant="secondary">My Product</Badge>}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "price",
@@ -188,10 +208,17 @@ const ProductsContainer = () => {
     {
       accessorKey: "owner",
       header: "Owner",
-      cell: ({ row }) =>
-        row.original.owner?.firstName
+      cell: ({ row }) => {
+        const isOwner = user?.id === row.original.owner?.id;
+
+        if (isOwner) {
+          return <span className="font-semibold text-primary">Me</span>;
+        }
+
+        return row.original.owner?.firstName
           ? `${row.original.owner.firstName} ${row.original.owner.lastName}`
-          : "Unknown",
+          : "Unknown";
+      },
     },
   ];
 
@@ -242,8 +269,14 @@ const ProductsContainer = () => {
                         <Input
                           id="rentStart"
                           type="date"
+                          min={new Date().toISOString().split("T")[0]}
                           value={rentStartDate}
-                          onChange={(e) => setRentStartDate(e.target.value)}
+                          onChange={(e) => {
+                            setRentStartDate(e.target.value);
+                            if (rentEndDate && e.target.value > rentEndDate) {
+                              setRentEndDate("");
+                            }
+                          }}
                         />
                       </div>
                       <div className="space-y-2">
@@ -251,6 +284,7 @@ const ProductsContainer = () => {
                         <Input
                           id="rentEnd"
                           type="date"
+                          min={rentStartDate || new Date().toISOString().split("T")[0]}
                           value={rentEndDate}
                           onChange={(e) => setRentEndDate(e.target.value)}
                         />

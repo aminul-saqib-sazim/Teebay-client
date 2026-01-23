@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
@@ -10,10 +10,13 @@ import { useGetMyOrdersQuery, useGetMySalesQuery } from "@/shared/redux/rtk-apis
 import { IOrder, EOrderType } from "@/shared/redux/rtk-apis/orders/orders.interfaces";
 
 import OrdersTable from "../../components/OrdersTable";
+import OrderDetailsDialog from "../../components/OrderDetailsDialog";
 
 const OrdersContainer = () => {
   const { data: myOrders, isLoading: isLoadingOrders } = useGetMyOrdersQuery();
   const { data: mySales, isLoading: isLoadingSales } = useGetMySalesQuery();
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const boughtProducts = useMemo(
     () => myOrders?.filter((o) => o.type === EOrderType.BUY) || [],
@@ -34,6 +37,11 @@ const OrdersContainer = () => {
     () => mySales?.filter((o) => o.type === EOrderType.RENT) || [],
     [mySales],
   );
+
+  const handleOpenDetails = (order: IOrder) => {
+    setSelectedOrder(order);
+    setIsDetailsOpen(true);
+  };
 
   const getColumns = (type: "BUY" | "SELL"): ColumnDef<IOrder>[] => [
     {
@@ -97,6 +105,15 @@ const OrdersContainer = () => {
         <h1 className="text-3xl font-bold">Transactions</h1>
       </div>
 
+      <OrderDetailsDialog
+        order={selectedOrder}
+        isOpen={isDetailsOpen}
+        onOpenChange={(open) => {
+          setIsDetailsOpen(open);
+          if (!open) setSelectedOrder(null);
+        }}
+      />
+
       <Tabs defaultValue="bought" className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="bought">Bought</TabsTrigger>
@@ -107,28 +124,44 @@ const OrdersContainer = () => {
 
         <TabsContent value="bought">
           <ScrollArea>
-            <OrdersTable data={boughtProducts} columns={getColumns("BUY")} />
+            <OrdersTable
+              data={boughtProducts}
+              columns={getColumns("BUY")}
+              onRowClick={handleOpenDetails}
+            />
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value="sold">
           <ScrollArea>
-            <OrdersTable data={soldProducts} columns={getColumns("SELL")} />
+            <OrdersTable
+              data={soldProducts}
+              columns={getColumns("SELL")}
+              onRowClick={handleOpenDetails}
+            />
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value="borrowed">
           <ScrollArea>
-            <OrdersTable data={borrowedProducts} columns={getColumns("BUY")} />
+            <OrdersTable
+              data={borrowedProducts}
+              columns={getColumns("BUY")}
+              onRowClick={handleOpenDetails}
+            />
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value="lent">
           <ScrollArea>
-            <OrdersTable data={lentProducts} columns={getColumns("SELL")} />
+            <OrdersTable
+              data={lentProducts}
+              columns={getColumns("SELL")}
+              onRowClick={handleOpenDetails}
+            />
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </TabsContent>
