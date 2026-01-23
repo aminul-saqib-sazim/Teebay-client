@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreVertical, Trash, Edit, ShoppingCart, Key } from "lucide-react";
 import { useQueryStates, parseAsInteger, parseAsString } from "nuqs";
 import { toast } from "sonner";
 
@@ -16,12 +15,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/components/shadui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shared/components/shadui/dropdown-menu";
 import { ScrollArea, ScrollBar } from "@/shared/components/shadui/scroll-area";
 import TablePagination from "@/shared/components/Table/TablePagination";
 
@@ -36,6 +29,7 @@ import { useMeQuery } from "@/shared/redux/rtk-apis/users/users.api";
 
 import ProductsTable from "../../components/ProductsTable";
 import ProductDialog from "../../components/ProductDialog/ProductDialog";
+import ProductDetailsDialog from "../../components/ProductDetailsDialog";
 
 import {
   Select,
@@ -71,6 +65,8 @@ const ProductsContainer = () => {
 
   const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [detailsProduct, setDetailsProduct] = useState<IProduct | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const [confirmationData, setConfirmationData] = useState<{
     productId: string;
@@ -81,6 +77,11 @@ const ProductsContainer = () => {
   const handleEdit = (product: IProduct) => {
     setSelectedProduct(product);
     setIsDialogOpen(true);
+  };
+
+  const handleOpenDetails = (product: IProduct) => {
+    setDetailsProduct(product);
+    setIsDetailsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -156,50 +157,6 @@ const ProductsContainer = () => {
         row.original.owner?.firstName
           ? `${row.original.owner.firstName} ${row.original.owner.lastName}`
           : "Unknown",
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => {
-        const product = row.original;
-        const isOwner = user?.id === product.owner?.id;
-
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {isOwner && (
-                <>
-                  <DropdownMenuItem onClick={() => handleEdit(product)}>
-                    <Edit className="mr-2 h-4 w-4" /> Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleDelete(product.id)}
-                    className="text-red-600"
-                  >
-                    <Trash className="mr-2 h-4 w-4" /> Delete
-                  </DropdownMenuItem>
-                </>
-              )}
-              {!isOwner && (
-                <>
-                  <DropdownMenuItem onClick={() => handleBuy(product.id)}>
-                    <ShoppingCart className="mr-2 h-4 w-4" /> Buy
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem onClick={() => handleRent(product.id)}>
-                    <Key className="mr-2 h-4 w-4" /> Rent
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
     },
   ];
 
@@ -281,6 +238,32 @@ const ProductsContainer = () => {
         product={selectedProduct}
       />
 
+      <ProductDetailsDialog
+        product={detailsProduct}
+        isOpen={isDetailsOpen}
+        isOwner={!!detailsProduct && user?.id === detailsProduct.owner?.id}
+        onOpenChange={(open) => {
+          setIsDetailsOpen(open);
+          if (!open) setDetailsProduct(null);
+        }}
+        onBuy={(productId) => {
+          handleBuy(productId);
+          setIsDetailsOpen(false);
+        }}
+        onRent={(productId) => {
+          handleRent(productId);
+          setIsDetailsOpen(false);
+        }}
+        onEdit={(product) => {
+          handleEdit(product);
+          setIsDetailsOpen(false);
+        }}
+        onDelete={(productId) => {
+          handleDelete(productId);
+          setIsDetailsOpen(false);
+        }}
+      />
+
       <div className="flex flex-row items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Products</h1>
         <div className="flex gap-4">
@@ -308,7 +291,11 @@ const ProductsContainer = () => {
       </div>
 
       <ScrollArea>
-        <ProductsTable data={productsData?.data || []} columns={columns} />
+        <ProductsTable
+          data={productsData?.data || []}
+          columns={columns}
+          onRowClick={handleOpenDetails}
+        />
         {productsData?.meta && <TablePagination paginationMetadata={productsData.meta} />}
         <ScrollBar orientation="horizontal" />
       </ScrollArea>

@@ -10,7 +10,7 @@ import {
 } from "@/shared/components/shadui/table";
 import { TProductsTableProps } from "./ProductsTable.types";
 
-const ProductsTable = ({ data, columns }: TProductsTableProps) => {
+const ProductsTable = ({ data, columns, onRowClick }: TProductsTableProps) => {
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>([]);
 
   const table = useReactTable({
@@ -40,7 +40,11 @@ const ProductsTable = ({ data, columns }: TProductsTableProps) => {
       </TableHeader>
       <TableBody>
         {table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
+          <TableRow
+            key={row.id}
+            onClick={() => onRowClick?.(row.original)}
+            className={onRowClick ? "cursor-pointer hover:bg-muted/50" : undefined}
+          >
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
