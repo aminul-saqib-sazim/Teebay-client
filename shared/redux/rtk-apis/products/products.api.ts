@@ -37,9 +37,9 @@ const productsApi = projectApi.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-            ...result.data.map(({ id }) => ({ type: "Products" as const, id })),
-            { type: "Products" as const, id: "LIST" },
-          ]
+              ...result.data.map(({ id }) => ({ type: "Products" as const, id })),
+              { type: "Products" as const, id: "LIST" },
+            ]
           : [{ type: "Products" as const, id: "LIST" }],
     }),
 

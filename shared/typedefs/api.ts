@@ -56,10 +56,22 @@ export enum EProductCategory {
   TOYS = "TOYS",
 }
 
+export enum ERentOption {
+  HOURLY = "HOURLY",
+  DAILY = "DAILY",
+}
+
+export enum EProductListingType {
+  BUY = "BUY",
+  RENT = "RENT",
+}
+
 export interface ICreateProductDto {
   title: string;
   description: string;
   price: number;
+  rentalPrice: number;
+  rentOption?: ERentOption;
   quantity: number;
   categories: EProductCategory[];
 }
@@ -71,4 +83,7 @@ export interface IGetProductsParams {
   limit?: number;
   search?: string;
   category?: EProductCategory;
+  listingType?: EProductListingType;
+  minPrice?: number;
+  maxPrice?: number;
 }

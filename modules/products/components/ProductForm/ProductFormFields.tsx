@@ -80,7 +80,12 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
             <FormItem>
               <FormLabel>Rental Price</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Rental Price" {...field} disabled={isSubmitting} />
+                <Input
+                  type="number"
+                  placeholder="Rental Price"
+                  {...field}
+                  disabled={isSubmitting}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,11 +99,7 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
         render={({ field }) => (
           <FormItem>
             <FormLabel>Rental Option</FormLabel>
-            <Select
-              disabled={isSubmitting}
-              onValueChange={field.onChange}
-              value={field.value}
-            >
+            <Select disabled={isSubmitting} onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a rental option" />
@@ -158,8 +159,8 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
                               return checked
                                 ? field.onChange([...field.value, category])
                                 : field.onChange(
-                                  field.value?.filter((value) => value !== category),
-                                );
+                                    field.value?.filter((value) => value !== category),
+                                  );
                             }}
                           />
                         </FormControl>

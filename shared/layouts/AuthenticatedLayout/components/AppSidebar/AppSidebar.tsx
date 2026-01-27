@@ -40,7 +40,10 @@ const AppSidebar = () => {
       <SidebarHeader className="h-16 flex items-center px-6 border-b border-border/50">
         <div className="flex items-center gap-3 group cursor-pointer">
           <div className="p-2 rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-110 group-hover:rotate-3 shadow-sm group-hover:shadow-primary/20">
-            <Sparkles size={22} className="transition-transform duration-500 group-hover:rotate-[360deg]" />
+            <Sparkles
+              size={22}
+              className="transition-transform duration-500 group-hover:rotate-[360deg]"
+            />
           </div>
           <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
             Teebay
@@ -63,9 +66,10 @@ const AppSidebar = () => {
                       isActive={isActive}
                       className={`
                         relative group transition-all duration-200 rounded-lg px-4 py-2.5
-                        ${isActive
-                          ? "bg-primary/10 text-primary font-semibold shadow-sm"
-                          : "hover:bg-secondary/80 text-muted-foreground hover:text-foreground"
+                        ${
+                          isActive
+                            ? "bg-primary/10 text-primary font-semibold shadow-sm"
+                            : "hover:bg-secondary/80 text-muted-foreground hover:text-foreground"
                         }
                       `}
                       render={

@@ -43,7 +43,7 @@ export interface ICreateProductDto {
   categories: EProductCategory[];
 }
 
-export interface IUpdateProductDto extends Partial<ICreateProductDto> { }
+export interface IUpdateProductDto extends Partial<ICreateProductDto> {}
 
 export interface IGetProductsParams {
   page?: number;

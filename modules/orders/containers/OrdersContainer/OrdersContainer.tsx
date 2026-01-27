@@ -74,25 +74,25 @@ const OrdersContainer = () => {
     },
     ...(type === "BUY"
       ? [
-        {
-          accessorKey: "product.owner",
-          header: "Seller",
-          cell: ({ row }: { row: { original: IOrder } }) => {
-            const owner = row.original.product?.owner;
-            return owner ? `${owner.firstName} ${owner.lastName}` : "Unknown";
+          {
+            accessorKey: "product.owner",
+            header: "Seller",
+            cell: ({ row }: { row: { original: IOrder } }) => {
+              const owner = row.original.product?.owner;
+              return owner ? `${owner.firstName} ${owner.lastName}` : "Unknown";
+            },
           },
-        },
-      ]
+        ]
       : [
-        {
-          accessorKey: "buyer",
-          header: "Buyer",
-          cell: ({ row }: { row: { original: IOrder } }) => {
-            const buyer = row.original.buyer;
-            return buyer ? `${buyer.firstName} ${buyer.lastName}` : "Unknown";
+          {
+            accessorKey: "buyer",
+            header: "Buyer",
+            cell: ({ row }: { row: { original: IOrder } }) => {
+              const buyer = row.original.buyer;
+              return buyer ? `${buyer.firstName} ${buyer.lastName}` : "Unknown";
+            },
           },
-        },
-      ]),
+        ]),
   ];
 
   if (isLoadingOrders || isLoadingSales) {

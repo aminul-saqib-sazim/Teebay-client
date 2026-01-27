@@ -8,8 +8,8 @@ import {
 import { Button } from "@/shared/components/shadui/button";
 import { Form } from "@/shared/components/shadui/form";
 import { IProduct, ERentOption } from "@/shared/redux/rtk-apis/products/products.interfaces";
-import { useProductForm } from "./ProductForm.hooks";
-import ProductFormFields from "./ProductFormFields";
+import { useProductForm } from "../ProductForm/ProductForm.hooks";
+import ProductFormFields from "../ProductForm/ProductFormFields";
 
 interface IProductDialogProps {
   product?: IProduct | null;
@@ -50,11 +50,7 @@ const ProductDialog: React.FC<IProductDialogProps> = ({ product, isOpen, onOpenC
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {showPreview
-              ? "Confirm Product Details"
-              : product
-                ? "Edit Product"
-                : "Add Product"}
+            {showPreview ? "Confirm Product Details" : product ? "Edit Product" : "Add Product"}
           </DialogTitle>
         </DialogHeader>
 

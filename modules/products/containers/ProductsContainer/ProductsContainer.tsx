@@ -51,14 +51,14 @@ export const PAGINATION_LIMIT_OPTIONS = [5, 10, 20, 50];
 const ProductsContainer = () => {
   const [{ page, limit, category, search, listingType, minPrice, maxPrice }, setQueryStates] =
     useQueryStates({
-    page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(10),
-    category: parseAsString.withDefault(""),
-    search: parseAsString.withDefault(""),
-    listingType: parseAsString.withDefault(""),
-    minPrice: parseAsFloat,
-    maxPrice: parseAsFloat,
-  });
+      page: parseAsInteger.withDefault(1),
+      limit: parseAsInteger.withDefault(10),
+      category: parseAsString.withDefault(""),
+      search: parseAsString.withDefault(""),
+      listingType: parseAsString.withDefault(""),
+      minPrice: parseAsFloat,
+      maxPrice: parseAsFloat,
+    });
 
   const { data: user } = useMeQuery();
 
@@ -256,7 +256,10 @@ const ProductsContainer = () => {
                       id="quantity"
                       type="number"
                       min={1}
-                      max={productsData?.data.find((p) => p.id === confirmationData?.productId)?.quantity}
+                      max={
+                        productsData?.data.find((p) => p.id === confirmationData?.productId)
+                          ?.quantity
+                      }
                       value={quantity}
                       onChange={(e) => setQuantity(Number(e.target.value))}
                     />

@@ -26,9 +26,7 @@ const OrderDetailsDialog: React.FC<IOrderDetailsDialogProps> = ({
   const quantity = order.quantity || 1;
   const totalPrice = (order.price * quantity).toFixed(2);
   const createdAt = format(new Date(order.createdAt), "PPp");
-  const rentStartDate = order.rentStartDate
-    ? format(new Date(order.rentStartDate), "PPP")
-    : null;
+  const rentStartDate = order.rentStartDate ? format(new Date(order.rentStartDate), "PPP") : null;
   const rentEndDate = order.rentEndDate ? format(new Date(order.rentEndDate), "PPP") : null;
 
   return (
