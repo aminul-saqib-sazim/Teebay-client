@@ -13,12 +13,11 @@ const productsApi = projectApi.injectEndpoints({
         params,
       }),
       transformResponse: (
-        response: { products: IProduct[]; total: number },
+        response: TApiResponse<{ products: IProduct[]; total: number }>,
         _meta,
         params,
       ): IPaginatedProductsResponse => {
-        // Backend returns { products, total } directly
-        const { products, total } = response;
+        const { products, total } = response.data;
         const limit = params.limit || 10;
         const page = params.page || 1;
         const totalPages = Math.ceil(total / limit);
@@ -38,9 +37,9 @@ const productsApi = projectApi.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "Products" as const, id })),
-              { type: "Products" as const, id: "LIST" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "Products" as const, id })),
+            { type: "Products" as const, id: "LIST" },
+          ]
           : [{ type: "Products" as const, id: "LIST" }],
     }),
 
@@ -85,7 +84,7 @@ const productsApi = projectApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, id) => [
         { type: "Products" as const, id },
-        // Might need to invalidate User balance/Audit logs/etc
+        { type: "Products" as const, id: "LIST" },
       ],
     }),
 
@@ -94,7 +93,10 @@ const productsApi = projectApi.injectEndpoints({
         url: `products/${id}/rent`,
         method: "POST",
       }),
-      invalidatesTags: (_result, _error, id) => [{ type: "Products" as const, id }],
+      invalidatesTags: (_result, _error, id) => [
+        { type: "Products" as const, id },
+        { type: "Products" as const, id: "LIST" },
+      ],
     }),
   }),
   overrideExisting: false,

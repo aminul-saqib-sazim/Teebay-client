@@ -154,6 +154,7 @@ const ProductsContainer = () => {
                   <DropdownMenuItem onClick={() => handleBuy(product.id)}>
                     <ShoppingCart className="mr-2 h-4 w-4" /> Buy
                   </DropdownMenuItem>
+
                   <DropdownMenuItem onClick={() => handleRent(product.id)}>
                     <Key className="mr-2 h-4 w-4" /> Rent
                   </DropdownMenuItem>
