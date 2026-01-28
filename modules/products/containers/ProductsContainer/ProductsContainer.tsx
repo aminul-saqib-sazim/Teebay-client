@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
 import { useQueryStates, parseAsInteger, parseAsString, parseAsFloat } from "nuqs";
 import { toast } from "sonner";
 
 import FullPageLoadingSpinner from "@/shared/components/FullPageLoadingSpinner";
 import { Button } from "@/shared/components/shadui/button";
-import { Badge } from "@/shared/components/shadui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,7 +44,7 @@ import {
 import { Input } from "@/shared/components/shadui/input";
 import { Label } from "@/shared/components/shadui/label";
 
-export const PAGINATION_LIMIT_OPTIONS = [5, 10, 20, 50];
+import { getProductColumns } from "./ProductContainer.constants";
 
 const ProductsContainer = () => {
   const [{ page, limit, category, search, listingType, minPrice, maxPrice }, setQueryStates] =
@@ -166,60 +164,7 @@ const ProductsContainer = () => {
     }
   };
 
-  const columns: ColumnDef<IProduct>[] = [
-    {
-      accessorKey: "title",
-      header: "Title",
-      cell: ({ row }) => {
-        const isOwner = user?.id === row.original.owner?.id;
-
-        return (
-          <div className="flex items-center gap-2">
-            <span>{row.original.title}</span>
-            {isOwner && <Badge variant="secondary">My Product</Badge>}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: ({ row }) => `$${row.original.price}`,
-    },
-    {
-      accessorKey: "rentalPrice",
-      header: "Rental Price",
-      cell: ({ row }) => {
-        const { rentalPrice, rentOption } = row.original;
-        const optionLabel = rentOption === "HOURLY" ? "hour" : "day";
-        return `$${rentalPrice}/${optionLabel}`;
-      },
-    },
-    {
-      accessorKey: "quantity",
-      header: "Quantity",
-    },
-    {
-      accessorKey: "categories",
-      header: "Categories",
-      cell: ({ row }) => row.original.categories.join(", "),
-    },
-    {
-      accessorKey: "owner",
-      header: "Owner",
-      cell: ({ row }) => {
-        const isOwner = user?.id === row.original.owner?.id;
-
-        if (isOwner) {
-          return <span className="font-semibold text-primary">Me</span>;
-        }
-
-        return row.original.owner?.firstName
-          ? `${row.original.owner.firstName} ${row.original.owner.lastName}`
-          : "Unknown";
-      },
-    },
-  ];
+  const columns = getProductColumns(user);
 
   if (isLoading) {
     return <FullPageLoadingSpinner />;
@@ -386,9 +331,9 @@ const ProductsContainer = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {Object.values(EProductCategory).map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat}
+                {Object.values(EProductCategory).map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
                   </SelectItem>
                 ))}
               </SelectContent>

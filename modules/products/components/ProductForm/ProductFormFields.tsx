@@ -1,5 +1,4 @@
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -23,12 +22,7 @@ import {
 } from "@/shared/components/shadui/select";
 
 import { Checkbox } from "@/shared/components/shadui/checkbox";
-import { ICreateProductDto } from "@/shared/typedefs/api";
-
-interface IProductFormFieldsProps {
-  form: UseFormReturn<ICreateProductDto>;
-  isSubmitting: boolean;
-}
+import { IProductFormFieldsProps } from "./ProductForm.types";
 
 const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitting }) => {
   return (

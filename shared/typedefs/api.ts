@@ -1,3 +1,5 @@
+import { EProductCategory } from "../redux/rtk-apis/products/products.interfaces";
+
 export interface IChangePasswordDto {
   currentPassword: string;
   /** @minLength 8 */
@@ -45,15 +47,6 @@ export interface IPresignedUrlResponse {
 export interface IVerifyParams {
   token: string;
   type: string;
-}
-
-export enum EProductCategory {
-  ELECTRONICS = "ELECTRONICS",
-  FURNITURE = "FURNITURE",
-  HOME_APPLIANCES = "HOME_APPLIANCES",
-  SPORTING_GOODS = "SPORTING_GOODS",
-  OUTDOOR = "OUTDOOR",
-  TOYS = "TOYS",
 }
 
 export enum ERentOption {
