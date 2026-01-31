@@ -58,7 +58,7 @@
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
     "shadcn": "^3.6.3",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.5",
     "socket.io-client": "^4.8.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
