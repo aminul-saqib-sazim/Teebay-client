@@ -833,7 +833,7 @@
     "@babel/plugin-transform-modules-commonjs" "^7.27.1"
     "@babel/plugin-transform-typescript" "^7.28.5"
 
-"@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.23.2", "@babel/runtime@^7.26.10", "@babel/runtime@^7.27.6", "@babel/runtime@^7.28.4":
+"@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.23.2", "@babel/runtime@^7.27.6", "@babel/runtime@^7.28.4":
   version "7.28.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.6.tgz#d267a43cb1836dc4d182cce93ae75ba954ef6d2b"
   integrity sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==
@@ -5451,12 +5451,12 @@ i18next-fs-backend@^2.6.0:
   resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-2.6.1.tgz#bb352278136f47599783308df29f0a1b6a0d08b6"
   integrity sha512-eYWTX7QT7kJ0sZyCPK6x1q+R63zvNKv2D6UdbMf15A8vNb2ZLyw4NNNZxPFwXlIv/U+oUtg8SakW6ZgJZcoqHQ==
 
-i18next@^24.2.2:
-  version "24.2.3"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-24.2.3.tgz#3a05f72615cbd7c00d7e348667e2aabef1df753b"
-  integrity sha512-lfbf80OzkocvX7nmZtu7nSTNbrTYR52sLWxPtlXX1zAhVw8WEnFk4puUkCR4B1dNQwbSpEHHHemcZu//7EcB7A==
+i18next@^25.8.4:
+  version "25.8.4"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.8.4.tgz#1b7ad19515d5b8b18cdc66a26386363dac6ba94f"
+  integrity sha512-a9A0MnUjKvzjEN/26ZY1okpra9kA8MEwzYEz1BNm+IyxUKPRH6ihf0p7vj8YvULwZHKHl3zkJ6KOt4hewxBecQ==
   dependencies:
-    "@babel/runtime" "^7.26.10"
+    "@babel/runtime" "^7.28.4"
 
 iconv-lite@0.6.3:
   version "0.6.3"
