@@ -8,10 +8,7 @@ import {
 } from "@/shared/components/shadui/form";
 import { Input } from "@/shared/components/shadui/input";
 import { Textarea } from "@/shared/components/shadui/textarea";
-import {
-  EProductCategory,
-  ERentOption,
-} from "@/shared/redux/rtk-apis/products/products.interfaces";
+import { ERentOption } from "@/shared/redux/rtk-apis/products/products.interfaces";
 
 import {
   Select,
@@ -23,8 +20,12 @@ import {
 
 import { Checkbox } from "@/shared/components/shadui/checkbox";
 import { IProductFormFieldsProps } from "./ProductForm.types";
+import { useGetCategoriesQuery } from "@/shared/redux/rtk-apis/products/products.api";
+import { mapCategoryNameToEnum } from "./ProductForm.helpers";
 
 const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitting }) => {
+  const { data: categories = [], isLoading: categoriesLoading } = useGetCategoriesQuery();
+
   return (
     <div className="grid gap-4 py-4">
       <FormField
@@ -134,37 +135,45 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
             <div className="mb-4">
               <FormLabel className="text-base">Categories</FormLabel>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              {Object.values(EProductCategory).map((category) => (
-                <FormField
-                  key={category}
-                  control={form.control}
-                  name="categories"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
-                        key={category}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(category)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, category])
-                                : field.onChange(
-                                    field.value?.filter((value) => value !== category),
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal">{category}</FormLabel>
-                      </FormItem>
-                    );
-                  }}
-                />
-              ))}
-            </div>
+            {categoriesLoading ? (
+              <div>Loading categories...</div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                {categories.map((category) => (
+                  <FormField
+                    key={category.id}
+                    control={form.control}
+                    name="categories"
+                    render={({ field }) => {
+                      return (
+                        <FormItem
+                          key={category.id}
+                          className="flex flex-row items-start space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={
+                                field.value?.includes(mapCategoryNameToEnum(category.name)) || false
+                              }
+                              onCheckedChange={(checked) => {
+                                const currentValue = field.value || [];
+                                const enumValue = mapCategoryNameToEnum(category.name);
+                                return checked
+                                  ? field.onChange([...currentValue, enumValue])
+                                  : field.onChange(
+                                      currentValue.filter((value) => value !== enumValue),
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal">{category.name}</FormLabel>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                ))}
+              </div>
+            )}
             <FormMessage />
           </FormItem>
         )}

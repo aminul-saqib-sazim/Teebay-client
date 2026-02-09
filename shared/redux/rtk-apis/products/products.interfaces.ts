@@ -27,7 +27,7 @@ export interface IProduct {
   rentalPrice: number;
   rentOption?: ERentOption;
   quantity: number;
-  categories: EProductCategory[];
+  categories: string[];
   owner: IUserResponse;
   created_at: string;
   updated_at: string;
@@ -65,4 +65,15 @@ export interface IPaginatedProductsResponse {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
   };
+}
+
+export interface ICategory {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+}
+
+export interface IGetCategoriesResponse {
+  data: ICategory[];
 }

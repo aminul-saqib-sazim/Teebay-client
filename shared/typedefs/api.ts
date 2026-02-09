@@ -1,5 +1,3 @@
-import { EProductCategory } from "../redux/rtk-apis/products/products.interfaces";
-
 export interface IChangePasswordDto {
   currentPassword: string;
   /** @minLength 8 */
@@ -66,7 +64,7 @@ export interface ICreateProductDto {
   rentalPrice: number;
   rentOption?: ERentOption;
   quantity: number;
-  categories: EProductCategory[];
+  categories: string[];
 }
 
 export interface IUpdateProductDto extends Partial<ICreateProductDto> {}
@@ -75,7 +73,7 @@ export interface IGetProductsParams {
   page?: number;
   limit?: number;
   search?: string;
-  category?: EProductCategory;
+  category?: string;
   listingType?: EProductListingType;
   minPrice?: number;
   maxPrice?: number;

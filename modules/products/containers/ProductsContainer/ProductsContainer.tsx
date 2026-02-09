@@ -22,6 +22,7 @@ import {
   useDeleteProductMutation,
   useBuyProductMutation,
   useRentProductMutation,
+  useGetCategoriesQuery,
 } from "@/shared/redux/rtk-apis/products/products.api";
 import {
   IProduct,
@@ -45,6 +46,7 @@ import { Input } from "@/shared/components/shadui/input";
 import { Label } from "@/shared/components/shadui/label";
 
 import { getProductColumns } from "./ProductContainer.constants";
+import { mapCategoryNameToEnum } from "../../components/ProductForm/ProductForm.helpers";
 
 const ProductsContainer = () => {
   const [{ page, limit, category, search, listingType, minPrice, maxPrice }, setQueryStates] =
@@ -69,6 +71,7 @@ const ProductsContainer = () => {
     minPrice: minPrice ?? undefined,
     maxPrice: maxPrice ?? undefined,
   });
+  const { data: categories = [], isLoading: categoriesLoading } = useGetCategoriesQuery();
 
   const [deleteProduct] = useDeleteProductMutation();
   const [buyProduct] = useBuyProductMutation();
@@ -331,11 +334,17 @@ const ProductsContainer = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {Object.values(EProductCategory).map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
+                {categoriesLoading ? (
+                  <SelectItem value="" disabled>
+                    Loading categories...
                   </SelectItem>
-                ))}
+                ) : (
+                  categories.map((category) => (
+                    <SelectItem key={category.id} value={mapCategoryNameToEnum(category.name)}>
+                      {category.name}
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>

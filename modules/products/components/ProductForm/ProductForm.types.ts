@@ -7,7 +7,6 @@ export interface IProductFormProps {
   onClose: () => void;
 }
 
-
 export interface IProductFormFieldsProps {
   form: UseFormReturn<ICreateProductDto>;
   isSubmitting: boolean;

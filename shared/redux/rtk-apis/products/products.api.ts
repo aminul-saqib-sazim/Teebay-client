@@ -1,7 +1,7 @@
 import { TApiResponse } from "@/shared/typedefs";
 
 import projectApi from "../api.config";
-import { IPaginatedProductsResponse, IProduct } from "./products.interfaces";
+import { ICategory, IPaginatedProductsResponse, IProduct } from "./products.interfaces";
 import { ICreateProductDto, IGetProductsParams, IUpdateProductDto } from "@/shared/typedefs/api";
 
 const productsApi = projectApi.injectEndpoints({
@@ -41,6 +41,14 @@ const productsApi = projectApi.injectEndpoints({
               { type: "Products" as const, id: "LIST" },
             ]
           : [{ type: "Products" as const, id: "LIST" }],
+    }),
+
+    getCategories: builder.query<ICategory[], void>({
+      query: () => ({
+        url: "products/categories",
+        method: "GET",
+      }),
+      transformResponse: (response: TApiResponse<ICategory[]>) => response.data,
     }),
 
     createProduct: builder.mutation<IProduct, ICreateProductDto>({
@@ -114,4 +122,5 @@ export const {
   useDeleteProductMutation,
   useBuyProductMutation,
   useRentProductMutation,
+  useGetCategoriesQuery,
 } = productsApi;
