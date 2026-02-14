@@ -102,7 +102,7 @@
     "typescript": "^5.8.0",
     "vitest": "^2.1.8",
     "vitest-mock-extended": "^2.0.2",
-    "webpack": "^5.90.0"
+    "webpack": "^5.105.2"
   },
   "resolutions": {
     "@types/react": "18.3.1",
