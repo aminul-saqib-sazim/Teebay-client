@@ -13,24 +13,27 @@ const productsApi = projectApi.injectEndpoints({
         params,
       }),
       transformResponse: (
-        response: TApiResponse<{ products: IProduct[]; total: number }>,
-        _meta,
-        params,
+        response: TApiResponse<{
+          data: IProduct[];
+          meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+          };
+        }>,
       ): IPaginatedProductsResponse => {
-        const { products, total } = response.data;
-        const limit = params.limit || 10;
-        const page = params.page || 1;
-        const totalPages = Math.ceil(total / limit);
+        const { data, meta: metaData } = response.data;
 
         return {
-          data: products,
+          data,
           meta: {
-            currentPage: page,
-            itemsPerPage: limit,
-            totalItems: total,
-            totalPages,
-            hasNextPage: page < totalPages,
-            hasPreviousPage: page > 1,
+            currentPage: metaData.page,
+            itemsPerPage: metaData.limit,
+            totalItems: metaData.total,
+            totalPages: metaData.totalPages,
+            hasNextPage: metaData.page < metaData.totalPages,
+            hasPreviousPage: metaData.page > 1,
           },
         };
       },
