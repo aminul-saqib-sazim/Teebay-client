@@ -51,22 +51,7 @@ const UpdateProfileInformationFormFields = ({
           />
         </div>
       </div>
-      <div>
-        <FormField
-          disabled={isSubmitting}
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Last Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+
     </>
   );
 };
