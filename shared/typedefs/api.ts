@@ -46,3 +46,35 @@ export interface IVerifyParams {
   token: string;
   type: string;
 }
+
+export enum ERentOption {
+  HOURLY = "HOURLY",
+  DAILY = "DAILY",
+}
+
+export enum EProductListingType {
+  BUY = "BUY",
+  RENT = "RENT",
+}
+
+export interface ICreateProductDto {
+  title: string;
+  description: string;
+  price: number;
+  rentalPrice: number;
+  rentOption?: ERentOption;
+  quantity: number;
+  categories: string[];
+}
+
+export interface IUpdateProductDto extends Partial<ICreateProductDto> {}
+
+export interface IGetProductsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  listingType?: EProductListingType;
+  minPrice?: number;
+  maxPrice?: number;
+}

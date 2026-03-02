@@ -51,7 +51,6 @@ const UpdateProfileInformationFormFields = ({
           />
         </div>
       </div>
-
     </>
   );
 };

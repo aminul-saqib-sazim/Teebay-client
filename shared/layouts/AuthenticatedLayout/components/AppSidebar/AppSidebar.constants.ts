@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings, Users } from "lucide-react";
+import { Calendar, Home, Inbox, Search, Settings, Users, Package, History } from "lucide-react";
 
 import { EUserRole } from "@/shared/redux/rtk-apis/roles/roles.enums";
 
@@ -7,6 +7,16 @@ const DEFAULT_SIDEBAR_MENU_ITEMS = [
     title: "Home",
     url: "/dashboard",
     icon: Home,
+  },
+  {
+    title: "Products",
+    url: "/products",
+    icon: Package,
+  },
+  {
+    title: "Orders",
+    url: "/orders",
+    icon: History,
   },
   {
     title: "Settings",
@@ -20,6 +30,16 @@ const ADMIN_SIDEBAR_MENU_ITEMS = [
     title: "Home",
     url: "/dashboard",
     icon: Home,
+  },
+  {
+    title: "Products",
+    url: "/products",
+    icon: Package,
+  },
+  {
+    title: "Orders",
+    url: "/orders",
+    icon: History,
   },
   {
     title: "Inbox",
@@ -53,6 +73,16 @@ const OWNER_SIDEBAR_MENU_ITEMS = [
     title: "Users",
     url: "/users",
     icon: Users,
+  },
+  {
+    title: "Products",
+    url: "/products",
+    icon: Package,
+  },
+  {
+    title: "Orders",
+    url: "/orders",
+    icon: History,
   },
   {
     title: "Settings",
