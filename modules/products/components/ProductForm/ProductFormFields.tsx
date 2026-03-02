@@ -1,5 +1,4 @@
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -9,17 +8,24 @@ import {
 } from "@/shared/components/shadui/form";
 import { Input } from "@/shared/components/shadui/input";
 import { Textarea } from "@/shared/components/shadui/textarea";
-import { EProductCategory } from "@/shared/redux/rtk-apis/products/products.interfaces";
+import { ERentOption } from "@/shared/redux/rtk-apis/products/products.interfaces";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/shadui/select";
 
 import { Checkbox } from "@/shared/components/shadui/checkbox";
-import { ICreateProductDto } from "@/shared/typedefs/api";
-
-interface IProductFormFieldsProps {
-  form: UseFormReturn<ICreateProductDto>;
-  isSubmitting: boolean;
-}
+import { IProductFormFieldsProps } from "./ProductForm.types";
+import { useGetCategoriesQuery } from "@/shared/redux/rtk-apis/products/products.api";
+import { mapCategoryNameToEnum } from "./ProductForm.helpers";
 
 const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitting }) => {
+  const { data: categories = [], isLoading: categoriesLoading } = useGetCategoriesQuery();
+
   return (
     <div className="grid gap-4 py-4">
       <FormField
@@ -54,7 +60,7 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price</FormLabel>
+              <FormLabel>Purchase Price</FormLabel>
               <FormControl>
                 <Input type="number" placeholder="Price" {...field} disabled={isSubmitting} />
               </FormControl>
@@ -64,12 +70,17 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
         />
         <FormField
           control={form.control}
-          name="quantity"
+          name="rentalPrice"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Quantity</FormLabel>
+              <FormLabel>Rental Price</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Quantity" {...field} disabled={isSubmitting} />
+                <Input
+                  type="number"
+                  placeholder="Rental Price"
+                  {...field}
+                  disabled={isSubmitting}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -79,43 +90,90 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
 
       <FormField
         control={form.control}
+        name="rentOption"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Rental Option</FormLabel>
+            <Select disabled={isSubmitting} onValueChange={field.onChange} value={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a rental option" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {Object.values(ERentOption).map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option === ERentOption.HOURLY ? "Per Hour" : "Per Day"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="quantity"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Quantity</FormLabel>
+            <FormControl>
+              <Input type="number" placeholder="Quantity" {...field} disabled={isSubmitting} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
         name="categories"
         render={() => (
           <FormItem>
             <div className="mb-4">
               <FormLabel className="text-base">Categories</FormLabel>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              {Object.values(EProductCategory).map((category) => (
-                <FormField
-                  key={category}
-                  control={form.control}
-                  name="categories"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
-                        key={category}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(category)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, category])
-                                : field.onChange(
-                                    field.value?.filter((value) => value !== category),
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal">{category}</FormLabel>
-                      </FormItem>
-                    );
-                  }}
-                />
-              ))}
-            </div>
+            {categoriesLoading ? (
+              <div>Loading categories...</div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                {categories.map((category) => (
+                  <FormField
+                    key={category.id}
+                    control={form.control}
+                    name="categories"
+                    render={({ field }) => {
+                      return (
+                        <FormItem
+                          key={category.id}
+                          className="flex flex-row items-start space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={
+                                field.value?.includes(mapCategoryNameToEnum(category.name)) || false
+                              }
+                              onCheckedChange={(checked) => {
+                                const currentValue = field.value || [];
+                                const enumValue = mapCategoryNameToEnum(category.name);
+                                return checked
+                                  ? field.onChange([...currentValue, enumValue])
+                                  : field.onChange(
+                                      currentValue.filter((value) => value !== enumValue),
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal">{category.name}</FormLabel>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                ))}
+              </div>
+            )}
             <FormMessage />
           </FormItem>
         )}

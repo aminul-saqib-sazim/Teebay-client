@@ -8,9 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/shadui/table";
-import { TProductsTableProps } from "./ProductsTable.types";
+import { TOrdersTableProps } from "./OrdersTable.types";
 
-const ProductsTable = ({ data, columns, onRowClick }: TProductsTableProps) => {
+const OrdersTable = ({ data, columns, onRowClick }: TOrdersTableProps) => {
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>([]);
 
   const table = useReactTable({
@@ -56,9 +56,16 @@ const ProductsTable = ({ data, columns, onRowClick }: TProductsTableProps) => {
             ))}
           </TableRow>
         ))}
+        {data.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={columns.length} className="text-center h-24">
+              No orders found.
+            </TableCell>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );
 };
 
-export default ProductsTable;
+export default OrdersTable;
