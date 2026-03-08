@@ -97,7 +97,7 @@ const ProductFormFields: React.FC<IProductFormFieldsProps> = ({ form, isSubmitti
             <Select disabled={isSubmitting} onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a rental option" />
+                  <SelectValue placeholder="Select a rental option" value={field.value} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>

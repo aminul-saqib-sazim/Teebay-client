@@ -330,7 +330,7 @@ const ProductsContainer = () => {
               }}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Categories" />
+                <SelectValue placeholder="All Categories" value={category} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
@@ -358,7 +358,7 @@ const ProductsContainer = () => {
               }}
             >
               <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="All Types" />
+                <SelectValue placeholder="All Types" value={listingType} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>

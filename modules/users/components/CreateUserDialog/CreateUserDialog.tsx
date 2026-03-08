@@ -99,7 +99,7 @@ const InviteUserDialog = ({ isOpen, onOpenChange }: IInviteUserDialogProps) => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
+                        <SelectValue placeholder="Select a role" value={field.value} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
