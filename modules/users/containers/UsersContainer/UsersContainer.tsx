@@ -171,7 +171,7 @@ const UsersContainer = () => {
             }}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by" />
+              <SelectValue placeholder="Filter by" value={userState?.toString()} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem key={EUserState.ACTIVE} value={EUserState.ACTIVE}>
@@ -190,7 +190,7 @@ const UsersContainer = () => {
             }}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select rows per page" />
+              <SelectValue placeholder="Select rows per page" value={limit.toString()} />
             </SelectTrigger>
             <SelectContent>
               {PAGINATION_LIMIT_OPTIONS.map((value) => (

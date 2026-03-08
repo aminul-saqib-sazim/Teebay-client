@@ -20,13 +20,14 @@ function SelectValue({
   className,
   children,
   placeholder,
+  value,
   ...props
 }: SelectPrimitive.Value.Props & {
   placeholder?: React.ReactNode;
   children?: React.ReactNode;
+  value?: string;
 }) {
-  const hasValue =
-    "value" in props && props.value !== undefined && props.value !== null && props.value !== "";
+  const hasValue = value !== undefined && value !== null && value !== "" && value !== "all";
 
   return (
     <SelectPrimitive.Value
